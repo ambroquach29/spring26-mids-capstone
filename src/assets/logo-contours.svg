@@ -1,0 +1,15 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g id="contours" fill="none" stroke-width="3">
+    <circle cx="50" cy="50" r="47" stroke="#E40303" />
+    <circle cx="50" cy="50" r="42" stroke="#FF8C00" />
+    <circle cx="50" cy="50" r="37" stroke="#FFED00" />
+    <circle cx="50" cy="50" r="32" stroke="#008026" />
+    <circle cx="50" cy="50" r="27" stroke="#24408E" />
+    <circle cx="50" cy="50" r="22" stroke="#732982" />
+  </g>
+  
+  <path 
+    d="M50 25C40.059 25 32 32.835 32 42.5C32 55.625 50 75 50 75C50 75 68 55.625 68 42.5C68 32.835 59.941 25 50 25ZM50 49C46.134 49 43 45.866 43 42C43 38.134 46.134 35 50 35C53.866 35 57 38.134 57 42C57 45.866 53.866 49 50 49Z" 
+    fill="#2D3436" stroke="white" stroke-width="2"
+  />
+</svg>

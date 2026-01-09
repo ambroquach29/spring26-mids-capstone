@@ -18,7 +18,7 @@ import {
   Mail,
 } from 'lucide-react';
 
-// Custom Arc Radius Logo Component - Rainbow circle with map pin
+// Custom Arc Radius Logo Component - Warped topographic style
 const ArcRadiusLogo = ({
   size = 36,
   className = '',
@@ -34,69 +34,86 @@ const ArcRadiusLogo = ({
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
-    {/* Rainbow circle arcs - Pride flag colors */}
-    <circle
-      cx="50"
-      cy="50"
-      r="46"
-      stroke="#E40303"
-      strokeWidth="8"
-      strokeDasharray="48 240"
-      strokeDashoffset="0"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="50"
-      cy="50"
-      r="46"
-      stroke="#FF8C00"
-      strokeWidth="8"
-      strokeDasharray="48 240"
-      strokeDashoffset="-48"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="50"
-      cy="50"
-      r="46"
-      stroke="#FFED00"
-      strokeWidth="8"
-      strokeDasharray="48 240"
-      strokeDashoffset="-96"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="50"
-      cy="50"
-      r="46"
-      stroke="#008026"
-      strokeWidth="8"
-      strokeDasharray="48 240"
-      strokeDashoffset="-144"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="50"
-      cy="50"
-      r="46"
-      stroke="#24408E"
-      strokeWidth="8"
-      strokeDasharray="48 240"
-      strokeDashoffset="-192"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="50"
-      cy="50"
-      r="46"
-      stroke="#732982"
-      strokeWidth="8"
-      strokeDasharray="48 240"
-      strokeDashoffset="-240"
-      strokeLinecap="round"
-    />
+    <defs>
+      <filter
+        id="topological-warp-large"
+        x="-20%"
+        y="-20%"
+        width="140%"
+        height="140%"
+      >
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.03"
+          numOctaves="3"
+          result="noise"
+        />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="noise"
+          scale="7"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+    </defs>
 
-    {/* Map pin icon in center */}
+    <g
+      filter="url(#topological-warp-large)"
+      strokeWidth="6"
+      strokeLinecap="round"
+      fill="none"
+    >
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#E40303"
+        strokeDasharray="48 240"
+        strokeDashoffset="0"
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#FF8C00"
+        strokeDasharray="48 240"
+        strokeDashoffset="-48"
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#FFED00"
+        strokeDasharray="48 240"
+        strokeDashoffset="-96"
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#008026"
+        strokeDasharray="48 240"
+        strokeDashoffset="-144"
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#24408E"
+        strokeDasharray="48 240"
+        strokeDashoffset="-192"
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#732982"
+        strokeDasharray="48 240"
+        strokeDashoffset="-240"
+      />
+    </g>
+
     <path
       d="M50 25C40.059 25 32 32.835 32 42.5C32 55.625 50 75 50 75C50 75 68 55.625 68 42.5C68 32.835 59.941 25 50 25ZM50 49C46.134 49 43 45.866 43 42C43 38.134 46.134 35 50 35C53.866 35 57 38.134 57 42C57 45.866 53.866 49 50 49Z"
       fill="#2D3436"
@@ -104,7 +121,7 @@ const ArcRadiusLogo = ({
   </svg>
 );
 
-// Smaller logo variant for nav
+// Smaller logo variant for nav - Warped topographic style
 const ArcRadiusLogoSmall = ({ size = 32 }: { size?: number }) => (
   <svg
     width={size}
@@ -113,69 +130,86 @@ const ArcRadiusLogoSmall = ({ size = 32 }: { size?: number }) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    {/* Rainbow circle arcs */}
-    <circle
-      cx="50"
-      cy="50"
-      r="44"
-      stroke="#E40303"
-      strokeWidth="10"
-      strokeDasharray="46 230"
-      strokeDashoffset="0"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="50"
-      cy="50"
-      r="44"
-      stroke="#FF8C00"
-      strokeWidth="10"
-      strokeDasharray="46 230"
-      strokeDashoffset="-46"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="50"
-      cy="50"
-      r="44"
-      stroke="#FFED00"
-      strokeWidth="10"
-      strokeDasharray="46 230"
-      strokeDashoffset="-92"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="50"
-      cy="50"
-      r="44"
-      stroke="#008026"
-      strokeWidth="10"
-      strokeDasharray="46 230"
-      strokeDashoffset="-138"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="50"
-      cy="50"
-      r="44"
-      stroke="#24408E"
-      strokeWidth="10"
-      strokeDasharray="46 230"
-      strokeDashoffset="-184"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="50"
-      cy="50"
-      r="44"
-      stroke="#732982"
-      strokeWidth="10"
-      strokeDasharray="46 230"
-      strokeDashoffset="-230"
-      strokeLinecap="round"
-    />
+    <defs>
+      <filter
+        id="topological-warp-small"
+        x="-20%"
+        y="-20%"
+        width="140%"
+        height="140%"
+      >
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.03"
+          numOctaves="3"
+          result="noise"
+        />
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="noise"
+          scale="7"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+    </defs>
 
-    {/* Map pin */}
+    <g
+      filter="url(#topological-warp-small)"
+      strokeWidth="6"
+      strokeLinecap="round"
+      fill="none"
+    >
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#E40303"
+        strokeDasharray="48 240"
+        strokeDashoffset="0"
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#FF8C00"
+        strokeDasharray="48 240"
+        strokeDashoffset="-48"
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#FFED00"
+        strokeDasharray="48 240"
+        strokeDashoffset="-96"
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#008026"
+        strokeDasharray="48 240"
+        strokeDashoffset="-144"
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#24408E"
+        strokeDasharray="48 240"
+        strokeDashoffset="-192"
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="46"
+        stroke="#732982"
+        strokeDasharray="48 240"
+        strokeDashoffset="-240"
+      />
+    </g>
+
     <path
       d="M50 25C40.059 25 32 32.835 32 42.5C32 55.625 50 75 50 75C50 75 68 55.625 68 42.5C68 32.835 59.941 25 50 25ZM50 49C46.134 49 43 45.866 43 42C43 38.134 46.134 35 50 35C53.866 35 57 38.134 57 42C57 45.866 53.866 49 50 49Z"
       fill="#2D3436"
