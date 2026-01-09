@@ -16,6 +16,10 @@ import {
   Github,
   Linkedin,
   Mail,
+  Sparkles,
+  Navigation,
+  Stethoscope,
+  Zap,
 } from 'lucide-react';
 
 // Custom Arc Radius Logo Component - Warped topographic style
@@ -239,9 +243,18 @@ type Competitor = {
   highlight?: boolean;
 };
 
+type MarketPlayer = {
+  name: string;
+  stage: 'Startup' | 'Nonprofit' | 'Enterprise';
+  product: string;
+  customer: string;
+  gap: string;
+  relationship?: string;
+};
+
 export default function ArcRadiusShowcase(): React.ReactElement {
   const [scrollY, setScrollY] = useState<number>(0);
-  const [activeFeature, setActiveFeature] = useState<number>(0);
+  const [_activeFeature, setActiveFeature] = useState<number>(0);
 
   useEffect(() => {
     const handleScroll = (): void => setScrollY(window.scrollY);
@@ -252,17 +265,29 @@ export default function ArcRadiusShowcase(): React.ReactElement {
   const stats: Stat[] = [
     {
       value: '39%',
-      label: 'seriously considered suicide in the past year',
+      label:
+        'seriously considered suicide in the past year (46% among trans/nonbinary youth)',
+      highlight: true,
+    },
+    {
+      value: '12%',
+      label: 'attempted suicide in the past year',
       highlight: true,
     },
     {
       value: '50%',
-      label: 'unable to access desired mental health care',
+      label:
+        'unable to access desired mental health care despite 84% wanting it',
+      highlight: false,
+    },
+    {
+      value: '90%',
+      label: 'report negative well-being impacts from anti-LGBTQ+ politics',
       highlight: false,
     },
     {
       value: '530+',
-      label: 'anti-LGBTQ+ bills proposed in 2024',
+      label: 'anti-LGBTQ+ bills proposed in 2024 alone',
       highlight: false,
     },
     {
@@ -331,15 +356,79 @@ export default function ArcRadiusShowcase(): React.ReactElement {
   ];
 
   const competitors: Competitor[] = [
-    { name: 'Trevor Project', resources: true, policy: false, crisis: true },
+    { name: 'Trevor Project', resources: false, policy: false, crisis: true },
     { name: 'Findhelp', resources: true, policy: false, crisis: false },
-    { name: 'MAP Equality', resources: false, policy: true, crisis: false },
+    { name: 'MAP', resources: false, policy: true, crisis: false },
+    {
+      name: 'Everywhere Is Queer',
+      resources: true,
+      policy: false,
+      crisis: false,
+    },
+    { name: 'QLIST', resources: true, policy: false, crisis: false },
+    { name: 'Voda', resources: false, policy: false, crisis: false },
     {
       name: 'Arc Radius',
       resources: true,
       policy: true,
       crisis: true,
       highlight: true,
+    },
+  ];
+
+  const startups: MarketPlayer[] = [
+    {
+      name: 'Everywhere Is Queer',
+      stage: 'Startup',
+      product:
+        'Directory of 20K+ queer-owned businesses; 250K+ downloads since Feb 2024',
+      customer: 'LGBTQ+ adults seeking businesses',
+      gap: 'No healthcare/services focus; no policy tracking; not youth-specific',
+    },
+    {
+      name: 'QLIST',
+      stage: 'Startup',
+      product: 'Global LGBTQ+ venue guide with 6K+ locations; crowd-sourced',
+      customer: 'LGBTQ+ travelers',
+      gap: 'Nightlife/travel focus; no healthcare, policy, or crisis support',
+    },
+    {
+      name: 'Voda',
+      stage: 'Startup',
+      product:
+        'AI mental health companion with queer-led meditations and journaling',
+      customer: 'LGBTQ+ adults seeking wellness',
+      gap: 'Self-help only; no resource locator or policy tracking',
+    },
+  ];
+
+  const establishedPlayers: MarketPlayer[] = [
+    {
+      name: 'Trevor Project',
+      stage: 'Nonprofit',
+      product:
+        'Crisis hotline, chat, text; TrevorSpace community for ages 13-24',
+      customer: 'LGBTQ+ youth in crisis',
+      gap: 'Crisis-focused; no local resource discovery or policy info',
+      relationship: 'Integration Partner',
+    },
+    {
+      name: 'Findhelp',
+      stage: 'Enterprise',
+      product:
+        'Largest US social care network; B2B platform for healthcare/govt',
+      customer: 'Healthcare systems, government',
+      gap: 'B2B only; not LGBTQ-specific; no direct consumer app',
+      relationship: 'API Partner',
+    },
+    {
+      name: 'Movement Advancement Project',
+      stage: 'Nonprofit',
+      product:
+        'Tracks 50+ LGBTQ policies across all states; static maps and reports',
+      customer: 'Researchers, advocates, policymakers',
+      gap: 'Reference tool; no AI Q&A; no resource locator',
+      relationship: 'Data Source',
     },
   ];
 
@@ -487,13 +576,14 @@ export default function ArcRadiusShowcase(): React.ReactElement {
               A Mental Health Crisis
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              LGBTQ+ youth in the United States face unprecedented challenges.
-              The data from The Trevor Project's 2024 National Survey paints a
-              stark picture.
+              LGBTQ+ youth in the United States face a mental health crisis of
+              unprecedented proportions. Data from The Trevor Project's 2024
+              National Survey of 18,000+ youth ages 13-24 paints a stark
+              picture.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {stats.map((stat, i) => (
               <div
                 key={i}
@@ -538,13 +628,13 @@ export default function ArcRadiusShowcase(): React.ReactElement {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6 mt-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
               <div className="flex items-start gap-3">
                 <Heart className="text-rose-500 flex-shrink-0 mt-1" size={20} />
                 <div>
                   <div className="font-semibold mb-1">Healthcare Gap</div>
                   <p className="text-sm text-slate-600">
-                    50% who wanted mental health care couldn't access it
+                    84% want care, but only half can access it
                   </p>
                 </div>
               </div>
@@ -558,6 +648,18 @@ export default function ArcRadiusShowcase(): React.ReactElement {
                 </div>
               </div>
               <div className="flex items-start gap-3">
+                <AlertTriangle
+                  className="text-orange-500 flex-shrink-0 mt-1"
+                  size={20}
+                />
+                <div>
+                  <div className="font-semibold mb-1">Discrimination</div>
+                  <p className="text-sm text-slate-600">
+                    60% faced discrimination based on identity
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
                 <Users
                   className="text-amber-500 flex-shrink-0 mt-1"
                   size={20}
@@ -566,6 +668,100 @@ export default function ArcRadiusShowcase(): React.ReactElement {
                   <div className="font-semibold mb-1">Family Impact</div>
                   <p className="text-sm text-slate-600">
                     45% of trans youth families considered relocating
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Impact Section */}
+      <section className="py-24 px-6 bg-gradient-to-b from-white to-orange-50/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="inline-block bg-amber-100 text-amber-700 px-4 py-1 rounded-full text-sm font-semibold mb-4">
+              Why It Matters
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              The Impact of Solving This
+            </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              Addressing these challenges isn't just about convenience—it's
+              about saving lives and empowering families navigating an
+              increasingly complex landscape.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border-l-4 border-rose-500">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-rose-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                  <Sparkles className="text-rose-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">
+                    Life-Saving Potential
+                  </h3>
+                  <p className="text-slate-600 leading-relaxed">
+                    Research shows LGBTQ+ youth in accepting communities have
+                    significantly lower suicide attempt rates. Connecting youth
+                    to affirming spaces directly addresses the leading cause of
+                    death in this population.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border-l-4 border-teal-500">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                  <Navigation className="text-teal-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">Information Gap</h3>
+                  <p className="text-slate-600 leading-relaxed">
+                    45% of trans/nonbinary youth families have considered moving
+                    states due to anti-LGBTQ+ policies. These families need
+                    accessible, accurate information about laws and protections
+                    across jurisdictions.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border-l-4 border-cyan-500">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                  <Stethoscope className="text-cyan-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">
+                    Healthcare Access Crisis
+                  </h3>
+                  <p className="text-slate-600 leading-relaxed">
+                    50% of LGBTQ+ youth who wanted mental health care couldn't
+                    access it. Cost, parental permission, and geography are
+                    major barriers that better resource discovery can address.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border-l-4 border-amber-500">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                  <Zap className="text-amber-600" size={24} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">
+                    Rapidly Changing Landscape
+                  </h3>
+                  <p className="text-slate-600 leading-relaxed">
+                    With hundreds of bills introduced annually affecting LGBTQ+
+                    rights, static resources become outdated quickly. AI-powered
+                    systems can track and synthesize legislative changes in
+                    real-time.
                   </p>
                 </div>
               </div>
@@ -617,86 +813,189 @@ export default function ArcRadiusShowcase(): React.ReactElement {
             ))}
           </div>
 
-          {/* Competitive Analysis */}
-          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm">
-            <h3 className="text-2xl font-bold mb-8 text-center">
-              Market Gap Analysis
-            </h3>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-slate-200">
-                    <th className="text-left py-4 px-4 font-semibold text-slate-600">
-                      Platform
-                    </th>
-                    <th className="text-center py-4 px-4 font-semibold text-slate-600">
-                      Resource Discovery
-                    </th>
-                    <th className="text-center py-4 px-4 font-semibold text-slate-600">
-                      Policy Tracking
-                    </th>
-                    <th className="text-center py-4 px-4 font-semibold text-slate-600">
-                      Crisis Support
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {competitors.map((comp, i) => (
-                    <tr
-                      key={i}
-                      className={`border-b border-slate-100 ${
-                        comp.highlight
-                          ? 'bg-gradient-to-r from-rose-50 to-orange-50'
-                          : ''
-                      }`}
-                    >
-                      <td
-                        className={`py-4 px-4 font-semibold flex items-center gap-2 ${
-                          comp.highlight ? 'text-rose-600' : ''
+          {/* Market Landscape */}
+          <div className="space-y-8">
+            <div className="text-center">
+              <h3 className="text-2xl font-bold mb-2">Market Landscape</h3>
+              <p className="text-slate-600">
+                Understanding the competitive environment and partnership
+                opportunities
+              </p>
+            </div>
+
+            {/* Startups */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="bg-violet-100 text-violet-700 px-3 py-1 rounded-full text-sm font-semibold">
+                  Emerging Startups
+                </span>
+              </div>
+              <div className="grid md:grid-cols-3 gap-4">
+                {startups.map((player, i) => (
+                  <div
+                    key={i}
+                    className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <h4 className="font-bold text-lg">{player.name}</h4>
+                      <span className="bg-violet-50 text-violet-600 px-2 py-0.5 rounded text-xs font-medium">
+                        {player.stage}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-600 mb-3">
+                      {player.product}
+                    </p>
+                    <div className="text-xs text-slate-500 mb-3">
+                      <span className="font-semibold">Target:</span>{' '}
+                      {player.customer}
+                    </div>
+                    <div className="bg-rose-50 rounded-lg p-3">
+                      <div className="text-xs font-semibold text-rose-700 mb-1">
+                        Gap vs. Arc Radius
+                      </div>
+                      <p className="text-xs text-rose-600">{player.gap}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Established Players */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="bg-slate-700 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                  Established Players
+                </span>
+              </div>
+              <div className="grid md:grid-cols-3 gap-4">
+                {establishedPlayers.map((player, i) => (
+                  <div
+                    key={i}
+                    className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow border-t-4 border-slate-200"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <h4 className="font-bold text-lg">{player.name}</h4>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-medium ${
+                          player.stage === 'Nonprofit'
+                            ? 'bg-emerald-50 text-emerald-600'
+                            : 'bg-blue-50 text-blue-600'
                         }`}
                       >
-                        {comp.highlight && <ArcRadiusLogoSmall size={24} />}
-                        <span>{comp.name}</span>
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        {comp.resources ? (
-                          <Check
-                            className="inline text-emerald-500"
-                            size={20}
-                          />
-                        ) : (
-                          <X className="inline text-slate-300" size={20} />
-                        )}
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        {comp.policy ? (
-                          <Check
-                            className="inline text-emerald-500"
-                            size={20}
-                          />
-                        ) : (
-                          <X className="inline text-slate-300" size={20} />
-                        )}
-                      </td>
-                      <td className="text-center py-4 px-4">
-                        {comp.crisis ? (
-                          <Check
-                            className="inline text-emerald-500"
-                            size={20}
-                          />
-                        ) : (
-                          <X className="inline text-slate-300" size={20} />
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        {player.stage}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-600 mb-3">
+                      {player.product}
+                    </p>
+                    <div className="text-xs text-slate-500 mb-3">
+                      <span className="font-semibold">Target:</span>{' '}
+                      {player.customer}
+                    </div>
+                    <div className="bg-rose-50 rounded-lg p-3 mb-3">
+                      <div className="text-xs font-semibold text-rose-700 mb-1">
+                        Gap vs. Arc Radius
+                      </div>
+                      <p className="text-xs text-rose-600">{player.gap}</p>
+                    </div>
+                    {player.relationship && (
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                        <span className="text-xs font-semibold text-emerald-700">
+                          {player.relationship}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-            <p className="text-center text-slate-500 mt-6 text-sm">
-              Arc Radius is the only platform combining all three critical
-              functions in a unified experience.
-            </p>
+
+            {/* Comparison Summary Table */}
+            <div className="bg-white rounded-3xl p-8 shadow-sm">
+              <h4 className="text-xl font-bold mb-6 text-center">
+                Feature Comparison
+              </h4>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-200">
+                      <th className="text-left py-3 px-3 font-semibold text-slate-600">
+                        Platform
+                      </th>
+                      <th className="text-center py-3 px-3 font-semibold text-slate-600">
+                        Resource Discovery
+                      </th>
+                      <th className="text-center py-3 px-3 font-semibold text-slate-600">
+                        Policy Tracking
+                      </th>
+                      <th className="text-center py-3 px-3 font-semibold text-slate-600">
+                        Crisis Support
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {competitors.map((comp, i) => (
+                      <tr
+                        key={i}
+                        className={`border-b border-slate-100 ${
+                          comp.highlight
+                            ? 'bg-gradient-to-r from-rose-50 to-orange-50'
+                            : ''
+                        }`}
+                      >
+                        <td
+                          className={`py-3 px-3 font-semibold ${
+                            comp.highlight ? 'text-rose-600' : ''
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            {comp.highlight && <ArcRadiusLogoSmall size={20} />}
+                            <span>{comp.name}</span>
+                          </div>
+                        </td>
+                        <td className="text-center py-3 px-3">
+                          {comp.resources ? (
+                            <Check
+                              className="inline text-emerald-500"
+                              size={18}
+                            />
+                          ) : (
+                            <X className="inline text-slate-300" size={18} />
+                          )}
+                        </td>
+                        <td className="text-center py-3 px-3">
+                          {comp.policy ? (
+                            <Check
+                              className="inline text-emerald-500"
+                              size={18}
+                            />
+                          ) : (
+                            <X className="inline text-slate-300" size={18} />
+                          )}
+                        </td>
+                        <td className="text-center py-3 px-3">
+                          {comp.crisis ? (
+                            <Check
+                              className="inline text-emerald-500"
+                              size={18}
+                            />
+                          ) : (
+                            <X className="inline text-slate-300" size={18} />
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-center text-slate-500 mt-6 text-sm">
+                Arc Radius is the{' '}
+                <span className="font-semibold">only platform</span> combining
+                all three critical functions in a unified, youth-focused
+                experience.
+              </p>
+            </div>
           </div>
         </div>
       </section>
