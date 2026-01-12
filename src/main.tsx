@@ -348,77 +348,77 @@ function ArcRadiusShowcase(): React.ReactElement {
   const features: Feature[] = [
     {
       icon: MapPin,
-      title: 'Arc Radius Map',
+      title: 'Resource Locator',
       description:
-        'Location-based discovery of LGBTQ+-affirming healthcare providers, mental health services, community centers, and safe spaces within a configurable radius.',
+        'Find LGBTQ+-affirming clinics, support groups, and community centers near you. Each resource includes NLP-extracted services, review summaries, and an AI chatbot that answers practical questions about transportation, costs, privacy, and more.',
       color: 'from-rose-400 to-orange-400',
-      tech: 'Geospatial Analysis • Recommendation Systems',
+      tech: 'Geospatial k-NN • NLP Service Extraction • RAG Q&A',
     },
     {
       icon: Scale,
       title: 'Policy Navigator',
       description:
-        'NLP-powered Q&A interface for asking questions about local laws in plain language. Real-time legislative tracking with personalized alerts.',
+        'Interactive state policy scorecard with bill-level analysis. AI classifies bills as Supportive/Neutral/Harmful, extracts key provisions, links to peer-reviewed health research, and predicts passage likelihood. Includes tools to draft advocacy letters and contact legislators.',
       color: 'from-teal-400 to-cyan-400',
-      tech: 'LegalBERT • RAG Pipeline • Semantic Search',
+      tech: 'LegalBERT • BioBERT Evidence Mining • XGBoost Prediction',
     },
     {
       icon: Phone,
       title: 'Crisis Connect',
       description:
-        'Integrated connections to Trevor Project, Trans Lifeline, and other crisis resources with warm handoffs based on user needs assessment.',
+        'One-tap access to LGBTQ+-specific crisis lines (Trevor Project, Trans Lifeline) and general resources (988, Crisis Text Line). Includes privacy guidance—Trans Lifeline never contacts authorities without consent.',
       color: 'from-amber-400 to-yellow-400',
-      tech: 'Multi-label Classification • Intake Routing',
+      tech: 'Curated Resource Database • Privacy-First Design',
     },
     {
       icon: BarChart3,
-      title: 'Policy Dashboard',
+      title: 'Health Info Hub',
       description:
-        'Visualizations comparing state/city policy environments, trend analysis, and actionable information on civic engagement opportunities.',
+        'Ask health questions in plain language and get CDC/NIH-sourced answers with citations. Covers PrEP, hormone therapy, STI testing, and more. Semantic search surfaces relevant local resources alongside clinical information.',
       color: 'from-emerald-400 to-teal-400',
-      tech: 'Time-series Analysis • Sentiment Classification',
+      tech: 'RAG Pipeline • PubMed/CDC Retrieval • Semantic Search',
     },
   ];
 
   const techniques: { name: string; desc: string; area: string }[] = [
     {
       name: 'LegalBERT Classification',
-      desc: 'Fine-tuned on LegiScan bills to classify impact type, extract key provisions via NER, and predict impact scores',
+      desc: 'Classifies bills as Supportive/Neutral/Harmful, extracts key provisions via NER, generates impact scores',
       area: 'Policy Navigator',
     },
     {
       name: 'Bill Passage Prediction',
-      desc: 'XGBoost + Survival Analysis (Cox regression) predicts passage likelihood, timeline, and stage progression',
+      desc: 'XGBoost + Cox survival analysis predicts passage probability and timeline based on sponsor party, committee, and state history',
       area: 'Policy Navigator',
     },
     {
       name: 'Bill Similarity Network',
-      desc: 'BERT embeddings + cosine similarity + graph visualization to detect template bills and track legislative spread',
+      desc: 'BERT embeddings + cosine similarity detect "copycat" template bills spreading across state legislatures',
       area: 'Policy Navigator',
     },
     {
-      name: 'Policy Impact Analysis',
-      desc: 'Difference-in-differences & panel regression correlating bills with SAMHSA/business data changes',
+      name: 'Research Evidence Mining',
+      desc: 'BioBERT extracts health outcome findings from PubMed studies and links them to specific bill provisions',
       area: 'Policy Navigator',
     },
     {
-      name: 'RAG for Health Info',
-      desc: 'Retrieval-augmented generation over CDC/medical literature with cited sources for health questions',
+      name: 'Geospatial k-NN Search',
+      desc: 'Haversine distance calculations find resources within configurable radius; R-tree indexing for fast queries',
       area: 'Resource Locator',
     },
     {
-      name: 'Geospatial Analysis',
-      desc: 'Haversine distance, R-tree indexing, k-NN for resource discovery, coverage gap detection',
+      name: 'NLP Service Extraction',
+      desc: 'Extracts services, accessibility info, and key findings from resource descriptions and reviews',
       area: 'Resource Locator',
     },
     {
-      name: 'Research Mining',
-      desc: 'BioBERT extracts policy→health outcome relationships from PubMed; meta-analysis aggregation',
-      area: 'Evidence & Research',
+      name: 'Health Info RAG',
+      desc: 'Retrieval-augmented generation over CDC/NIH sources with cited answers for PrEP, HRT, STI questions',
+      area: 'Resource Locator',
     },
     {
-      name: 'LLM Letter Generation',
-      desc: 'GPT-4 fine-tuned on advocacy communications; sentiment-aware drafting for support/oppose stances',
+      name: 'Advocacy Letter Generation',
+      desc: 'GPT-4 drafts personalized support/oppose letters using bill analysis and research evidence',
       area: 'Take Action',
     },
   ];
@@ -860,9 +860,9 @@ function ArcRadiusShowcase(): React.ReactElement {
               Introducing Arc Radius
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              A unified AI-powered platform for LGBTQ+ youth ages 13-24 to
-              discover affirming resources, understand their legal rights, and
-              connect to crisis support.
+              Three integrated tools—Resource Locator, Policy Navigator, and
+              Crisis Connect—powered by NLP, geospatial analysis, and
+              evidence-based health research.
             </p>
           </div>
 
@@ -1135,24 +1135,24 @@ function ArcRadiusShowcase(): React.ReactElement {
             <div className="grid md:grid-cols-2 gap-4 mb-10">
               {[
                 {
-                  feature: 'Bill Analysis',
+                  feature: 'Bill Classification',
                   color: 'purple',
-                  flow: 'LegiScan → LegalBERT → XGBoost → Predictions',
+                  flow: 'LegiScan → LegalBERT → Impact Score → UI Labels',
                 },
                 {
-                  feature: 'Resource Search',
+                  feature: 'Resource Discovery',
                   color: 'blue',
-                  flow: 'SAMHSA + Findhelp → Geospatial Index → k-NN',
+                  flow: 'Zipcode → Geocode → k-NN Search → NLP Enrichment',
                 },
                 {
                   feature: 'Health Q&A',
                   color: 'emerald',
-                  flow: 'PubMed → BioBERT → RAG → GPT-4',
+                  flow: 'User Query → Semantic Search → CDC/NIH → Cited Answer',
                 },
                 {
-                  feature: 'Bill Similarity',
+                  feature: 'Evidence Linking',
                   color: 'violet',
-                  flow: 'Bill Text → BERT Embed → Cosine Sim → Graph',
+                  flow: 'Bill Text → BioBERT → PubMed Match → Health Impacts',
                 },
               ].map((pipe) => (
                 <div
@@ -1213,7 +1213,7 @@ function ArcRadiusShowcase(): React.ReactElement {
               About
             </span>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Meet the Builder
+              Hi!
             </h2>
           </div>
 
