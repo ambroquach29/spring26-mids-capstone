@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './style.css';
+import Prototype from './pages/Prototype';
 import {
   MapPin,
   Scale,
@@ -22,7 +24,7 @@ import {
   Zap,
 } from 'lucide-react';
 
-// Custom Arc Radius Logo Component - Warped topographic style
+// Custom Arc Radius Logo Component - Warped topographic style with pindrop
 const ArcRadiusLogo = ({
   size = 36,
   className = '',
@@ -30,195 +32,241 @@ const ArcRadiusLogo = ({
   size?: number;
   className?: string;
 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 100 100"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
+  <div
+    className={`relative ${className}`}
+    style={{ width: size, height: size }}
   >
-    <defs>
-      <filter
-        id="topological-warp-large"
-        x="-20%"
-        y="-20%"
-        width="140%"
-        height="140%"
-      >
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="0.03"
-          numOctaves="3"
-          result="noise"
-        />
-        <feDisplacementMap
-          in="SourceGraphic"
-          in2="noise"
-          scale="7"
-          xChannelSelector="R"
-          yChannelSelector="G"
-        />
-      </filter>
-    </defs>
-
-    <g
-      filter="url(#topological-warp-large)"
-      strokeWidth="6"
-      strokeLinecap="round"
+    {/* Rainbow ring background */}
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
       fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="absolute inset-0"
     >
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#E40303"
-        strokeDasharray="48 240"
-        strokeDashoffset="0"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#FF8C00"
-        strokeDasharray="48 240"
-        strokeDashoffset="-48"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#FFED00"
-        strokeDasharray="48 240"
-        strokeDashoffset="-96"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#008026"
-        strokeDasharray="48 240"
-        strokeDashoffset="-144"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#24408E"
-        strokeDasharray="48 240"
-        strokeDashoffset="-192"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#732982"
-        strokeDasharray="48 240"
-        strokeDashoffset="-240"
-      />
-    </g>
-
-    <path
-      d="M50 25C40.059 25 32 32.835 32 42.5C32 55.625 50 75 50 75C50 75 68 55.625 68 42.5C68 32.835 59.941 25 50 25ZM50 49C46.134 49 43 45.866 43 42C43 38.134 46.134 35 50 35C53.866 35 57 38.134 57 42C57 45.866 53.866 49 50 49Z"
-      fill="#2D3436"
-    />
-  </svg>
+      <defs>
+        <filter
+          id="topological-warp-large"
+          x="-20%"
+          y="-20%"
+          width="140%"
+          height="140%"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.03"
+            numOctaves="3"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="7"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
+      <g
+        filter="url(#topological-warp-large)"
+        strokeWidth="6"
+        strokeLinecap="round"
+        fill="none"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#E40303"
+          strokeDasharray="48 240"
+          strokeDashoffset="0"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#FF8C00"
+          strokeDasharray="48 240"
+          strokeDashoffset="-48"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#FFED00"
+          strokeDasharray="48 240"
+          strokeDashoffset="-96"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#008026"
+          strokeDasharray="48 240"
+          strokeDashoffset="-144"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#24408E"
+          strokeDasharray="48 240"
+          strokeDashoffset="-192"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#732982"
+          strokeDasharray="48 240"
+          strokeDashoffset="-240"
+        />
+      </g>
+    </svg>
+    {/* Lucide MapPin (pindrop) icon with circle */}
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="relative">
+        <MapPin
+          size={size * 0.5}
+          className="text-slate-800"
+          strokeWidth={2.5}
+          fill="currentColor"
+        />
+        {/* Circle in the middle of the pin */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white border-2 border-slate-800"
+          style={{
+            width: `${size * 0.18}px`,
+            height: `${size * 0.18}px`,
+            marginTop: `-${size * 0.05}px`,
+          }}
+        />
+      </div>
+    </div>
+  </div>
 );
 
-// Smaller logo variant for nav - Warped topographic style
-const ArcRadiusLogoSmall = ({ size = 32 }: { size?: number }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 100 100"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      <filter
-        id="topological-warp-small"
-        x="-20%"
-        y="-20%"
-        width="140%"
-        height="140%"
-      >
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="0.03"
-          numOctaves="3"
-          result="noise"
-        />
-        <feDisplacementMap
-          in="SourceGraphic"
-          in2="noise"
-          scale="7"
-          xChannelSelector="R"
-          yChannelSelector="G"
-        />
-      </filter>
-    </defs>
-
-    <g
-      filter="url(#topological-warp-small)"
-      strokeWidth="6"
-      strokeLinecap="round"
+// Smaller logo variant for nav - Warped topographic style with pindrop
+const ArcRadiusLogoSmall = ({
+  size = 32,
+  dark = false,
+}: {
+  size?: number;
+  dark?: boolean;
+}) => (
+  <div className="relative" style={{ width: size, height: size }}>
+    {/* Rainbow ring background */}
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
       fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="absolute inset-0"
     >
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#E40303"
-        strokeDasharray="48 240"
-        strokeDashoffset="0"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#FF8C00"
-        strokeDasharray="48 240"
-        strokeDashoffset="-48"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#FFED00"
-        strokeDasharray="48 240"
-        strokeDashoffset="-96"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#008026"
-        strokeDasharray="48 240"
-        strokeDashoffset="-144"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#24408E"
-        strokeDasharray="48 240"
-        strokeDashoffset="-192"
-      />
-      <circle
-        cx="50"
-        cy="50"
-        r="46"
-        stroke="#732982"
-        strokeDasharray="48 240"
-        strokeDashoffset="-240"
-      />
-    </g>
-
-    <path
-      d="M50 25C40.059 25 32 32.835 32 42.5C32 55.625 50 75 50 75C50 75 68 55.625 68 42.5C68 32.835 59.941 25 50 25ZM50 49C46.134 49 43 45.866 43 42C43 38.134 46.134 35 50 35C53.866 35 57 38.134 57 42C57 45.866 53.866 49 50 49Z"
-      fill="#2D3436"
-    />
-  </svg>
+      <defs>
+        <filter
+          id="topological-warp-small"
+          x="-20%"
+          y="-20%"
+          width="140%"
+          height="140%"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.03"
+            numOctaves="3"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="7"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
+      <g
+        filter="url(#topological-warp-small)"
+        strokeWidth="6"
+        strokeLinecap="round"
+        fill="none"
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#E40303"
+          strokeDasharray="48 240"
+          strokeDashoffset="0"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#FF8C00"
+          strokeDasharray="48 240"
+          strokeDashoffset="-48"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#FFED00"
+          strokeDasharray="48 240"
+          strokeDashoffset="-96"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#008026"
+          strokeDasharray="48 240"
+          strokeDashoffset="-144"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#24408E"
+          strokeDasharray="48 240"
+          strokeDashoffset="-192"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          stroke="#732982"
+          strokeDasharray="48 240"
+          strokeDashoffset="-240"
+        />
+      </g>
+    </svg>
+    {/* Lucide MapPin (pindrop) icon with circle */}
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="relative">
+        <MapPin
+          size={size * 0.5}
+          className={dark ? 'text-white' : 'text-slate-800'}
+          strokeWidth={2.5}
+          fill="currentColor"
+        />
+        {/* Circle in the middle of the pin */}
+        <div
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 ${
+            dark ? 'bg-slate-900 border-white' : 'bg-white border-slate-800'
+          }`}
+          style={{
+            width: `${dark ? size * 0.28 : size * 0.24}px`,
+            height: `${dark ? size * 0.28 : size * 0.24}px`,
+            marginTop: `-${size * 0.05}px`,
+          }}
+        />
+      </div>
+    </div>
+  </div>
 );
 
 type Feature = {
@@ -252,7 +300,7 @@ type MarketPlayer = {
   relationship?: string;
 };
 
-export default function ArcRadiusShowcase(): React.ReactElement {
+function ArcRadiusShowcase(): React.ReactElement {
   const [scrollY, setScrollY] = useState<number>(0);
   const [_activeFeature, setActiveFeature] = useState<number>(0);
 
@@ -332,26 +380,46 @@ export default function ArcRadiusShowcase(): React.ReactElement {
     },
   ];
 
-  const techniques: { name: string; desc: string }[] = [
+  const techniques: { name: string; desc: string; area: string }[] = [
     {
-      name: 'NLP / LegalBERT',
-      desc: 'Bill classification and plain-language summarization',
+      name: 'LegalBERT Classification',
+      desc: 'Fine-tuned on LegiScan bills to classify impact type, extract key provisions via NER, and predict impact scores',
+      area: 'Policy Navigator',
     },
     {
-      name: 'RAG Pipeline',
-      desc: 'Grounded responses with citations via semantic search',
+      name: 'Bill Passage Prediction',
+      desc: 'XGBoost + Survival Analysis (Cox regression) predicts passage likelihood, timeline, and stage progression',
+      area: 'Policy Navigator',
+    },
+    {
+      name: 'Bill Similarity Network',
+      desc: 'BERT embeddings + cosine similarity + graph visualization to detect template bills and track legislative spread',
+      area: 'Policy Navigator',
+    },
+    {
+      name: 'Policy Impact Analysis',
+      desc: 'Difference-in-differences & panel regression correlating bills with SAMHSA/business data changes',
+      area: 'Policy Navigator',
+    },
+    {
+      name: 'RAG for Health Info',
+      desc: 'Retrieval-augmented generation over CDC/medical literature with cited sources for health questions',
+      area: 'Resource Locator',
     },
     {
       name: 'Geospatial Analysis',
-      desc: 'Location-based resource filtering and discovery',
+      desc: 'Haversine distance, R-tree indexing, k-NN for resource discovery, coverage gap detection',
+      area: 'Resource Locator',
     },
     {
-      name: 'Sentiment Analysis',
-      desc: 'Track legislative trajectory and emerging threats',
+      name: 'Research Mining',
+      desc: 'BioBERT extracts policy→health outcome relationships from PubMed; meta-analysis aggregation',
+      area: 'Evidence & Research',
     },
     {
-      name: 'Multi-label Classification',
-      desc: 'Match user needs to appropriate services',
+      name: 'LLM Letter Generation',
+      desc: 'GPT-4 fine-tuned on advocacy communications; sentiment-aware drafting for support/oppose stances',
+      area: 'Take Action',
     },
   ];
 
@@ -434,26 +502,26 @@ export default function ArcRadiusShowcase(): React.ReactElement {
 
   const techStack: { category: string; items: string[] }[] = [
     {
+      category: 'Data Sources',
+      items: ['LegiScan', 'SAMHSA', 'MAP', 'Findhelp', 'PubMed'],
+    },
+    {
+      category: 'ML / NLP',
+      items: ['LegalBERT', 'BioBERT', 'XGBoost', 'GPT-4'],
+    },
+    {
       category: 'Frontend',
-      items: ['React Native', 'React', 'TypeScript', 'Tailwind CSS'],
+      items: ['React', 'TypeScript', 'Tailwind'],
     },
     {
       category: 'Backend',
-      items: ['FastAPI', 'Python', 'PostgreSQL', 'pgvector'],
-    },
-    {
-      category: 'AI/ML',
-      items: ['LegalBERT', 'LangChain', 'LlamaIndex', 'Transformers'],
-    },
-    {
-      category: 'Infrastructure',
-      items: ['AWS EKS', 'Docker', 'Kubernetes', 'S3'],
+      items: ['FastAPI', 'PostgreSQL', 'pgvector'],
     },
   ];
 
   return (
     <div className="font-sans bg-gradient-to-b from-orange-50 via-rose-50 to-sky-50 min-h-screen text-slate-800 overflow-x-hidden">
-      {/* Navigation */}
+      {/* Navigation - Fixed: proper structure with scroll-based styling */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300 ${
           scrollY > 50
@@ -464,7 +532,9 @@ export default function ArcRadiusShowcase(): React.ReactElement {
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
             <ArcRadiusLogoSmall size={36} />
-            <span className="font-bold text-xl tracking-tight">Arc Radius</span>
+            <span className="font-bold text-xl tracking-tight text-slate-900">
+              Arc Radius
+            </span>
           </div>
           <div className="hidden md:flex gap-8 text-sm font-medium text-slate-600">
             <a
@@ -485,11 +555,17 @@ export default function ArcRadiusShowcase(): React.ReactElement {
             <a href="#about" className="hover:text-slate-900 transition-colors">
               About
             </a>
+            <Link
+              to="/prototype"
+              className="hover:text-slate-900 transition-colors"
+            >
+              Prototype
+            </Link>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section - Restored animated background */}
       <section className="min-h-screen flex flex-col justify-center items-center px-6 pt-24 pb-16 relative overflow-hidden">
         {/* Animated background shapes */}
         <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-rose-200/40 to-orange-200/40 rounded-full blur-3xl animate-pulse" />
@@ -510,7 +586,7 @@ export default function ArcRadiusShowcase(): React.ReactElement {
 
           {/* Large centered logo */}
           <div className="mb-8 flex justify-center">
-            <ArcRadiusLogo size={140} className="drop-shadow-lg" />
+            <ArcRadiusLogo size={140} className="drop-shadow-2xl" />
           </div>
 
           <h1 className="text-6xl md:text-8xl font-bold tracking-tight mb-6 bg-gradient-to-r from-rose-600 via-orange-500 to-amber-500 bg-clip-text text-transparent">
@@ -1010,32 +1086,99 @@ export default function ArcRadiusShowcase(): React.ReactElement {
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Data Science Techniques
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Leveraging state-of-the-art NLP, retrieval-augmented generation,
-              and geospatial analysis to deliver accurate, personalized support.
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+              From bill classification to resource discovery—ML models trained
+              on LegiScan, SAMHSA, MAP, and academic literature to power every
+              feature.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
-            {techniques.map((tech, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center text-white font-bold mb-4">
-                  {i + 1}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+            {techniques.map((tech, i) => {
+              const areaColors: Record<string, string> = {
+                'Policy Navigator': 'bg-purple-100 text-purple-700',
+                'Resource Locator': 'bg-blue-100 text-blue-700',
+                'Evidence & Research': 'bg-emerald-100 text-emerald-700',
+                'Take Action': 'bg-amber-100 text-amber-700',
+              };
+              return (
+                <div
+                  key={i}
+                  className="bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow border border-slate-100"
+                >
+                  <span
+                    className={`inline-block px-2 py-0.5 rounded text-xs font-medium mb-3 ${
+                      areaColors[tech.area] || 'bg-slate-100 text-slate-600'
+                    }`}
+                  >
+                    {tech.area}
+                  </span>
+                  <h4 className="font-bold mb-2 text-slate-800">{tech.name}</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    {tech.desc}
+                  </p>
                 </div>
-                <h4 className="font-bold mb-2">{tech.name}</h4>
-                <p className="text-sm text-slate-600">{tech.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Tech Stack */}
           <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 md:p-12 text-white">
-            <h3 className="text-2xl font-bold mb-8 text-center">
+            <h3 className="text-2xl font-bold mb-2 text-center">
               Technical Architecture
             </h3>
+            <p className="text-slate-400 text-center text-sm mb-8">
+              Feature-specific data pipelines
+            </p>
+
+            {/* Feature Pipelines */}
+            <div className="grid md:grid-cols-2 gap-4 mb-10">
+              {[
+                {
+                  feature: 'Bill Analysis',
+                  color: 'purple',
+                  flow: 'LegiScan → LegalBERT → XGBoost → Predictions',
+                },
+                {
+                  feature: 'Resource Search',
+                  color: 'blue',
+                  flow: 'SAMHSA + Findhelp → Geospatial Index → k-NN',
+                },
+                {
+                  feature: 'Health Q&A',
+                  color: 'emerald',
+                  flow: 'PubMed → BioBERT → RAG → GPT-4',
+                },
+                {
+                  feature: 'Bill Similarity',
+                  color: 'violet',
+                  flow: 'Bill Text → BERT Embed → Cosine Sim → Graph',
+                },
+              ].map((pipe) => (
+                <div
+                  key={pipe.feature}
+                  className="bg-white/5 rounded-lg p-3 border border-white/10"
+                >
+                  <span
+                    className={`text-xs font-semibold ${
+                      pipe.color === 'purple'
+                        ? 'text-purple-400'
+                        : pipe.color === 'blue'
+                        ? 'text-blue-400'
+                        : pipe.color === 'emerald'
+                        ? 'text-emerald-400'
+                        : 'text-violet-400'
+                    }`}
+                  >
+                    {pipe.feature}
+                  </span>
+                  <p className="text-xs text-slate-300 mt-1 font-mono">
+                    {pipe.flow}
+                  </p>
+                </div>
+              ))}
+            </div>
+
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {techStack.map((stack, i) => (
                 <div key={i}>
@@ -1070,7 +1213,7 @@ export default function ArcRadiusShowcase(): React.ReactElement {
               About
             </span>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Meet the Creator
+              Meet the Builder
             </h2>
           </div>
 
@@ -1132,8 +1275,8 @@ export default function ArcRadiusShowcase(): React.ReactElement {
 
           <div className="mt-8 text-center text-slate-500 text-sm">
             <p>
-              Relevant Coursework: W231 Behind the Data • W255 ML Systems
-              Engineering • W261 ML at Scale
+              Relevant Coursework: W231 Behind the Data: Humans and Values •
+              W255 ML Systems Engineering • W261 ML at Scale
             </p>
           </div>
         </div>
@@ -1144,7 +1287,7 @@ export default function ArcRadiusShowcase(): React.ReactElement {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-2">
-              <ArcRadiusLogoSmall size={32} />
+              <ArcRadiusLogoSmall size={32} dark={true} />
               <span className="font-bold">Arc Radius</span>
             </div>
             <p className="text-slate-400 text-sm">
@@ -1168,4 +1311,15 @@ export default function ArcRadiusShowcase(): React.ReactElement {
   );
 }
 
-createRoot(document.getElementById('app')!).render(<ArcRadiusShowcase />);
+function App() {
+  return (
+    <BrowserRouter basename="/spring26-mids-capstone">
+      <Routes>
+        <Route path="/" element={<ArcRadiusShowcase />} />
+        <Route path="/prototype" element={<Prototype />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+createRoot(document.getElementById('app')!).render(<App />);
