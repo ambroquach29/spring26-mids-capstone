@@ -374,16 +374,16 @@ function ArcRadiusShowcase(): React.ReactElement {
       icon: BarChart3,
       title: 'Health Info Hub',
       description:
-        'Ask health questions in plain language and get CDC/NIH-sourced answers with citations. Covers PrEP, hormone therapy, STI testing, and more. Semantic search surfaces relevant local resources alongside clinical information.',
+        'Plain-language health Q&A with cited sources from peer-reviewed literature and clinical guidelines (WPATH, Endocrine Society, Fenway Health). Designed for source resilience as federal LGBTQ+ health datasets face availability challenges.',
       color: 'from-emerald-400 to-teal-400',
-      tech: 'RAG Pipeline • PubMed/CDC Retrieval • Semantic Search',
+      tech: 'RAG Pipeline • PubMed • Clinical Guidelines',
     },
   ];
 
   const techniques: { name: string; desc: string; area: string }[] = [
     {
       name: 'LegalBERT Classification',
-      desc: 'Classifies bills as Supportive/Neutral/Harmful, extracts key provisions via NER, generates impact scores',
+      desc: 'Classifies bills as Supportive/Neutral/Harmful, extracts key provisions via NER, generates impact scores (-5 to +5)',
       area: 'Policy Navigator',
     },
     {
@@ -397,8 +397,8 @@ function ArcRadiusShowcase(): React.ReactElement {
       area: 'Policy Navigator',
     },
     {
-      name: 'Research Evidence Mining',
-      desc: 'BioBERT extracts health outcome findings from PubMed studies and links them to specific bill provisions',
+      name: 'Cross-State Comparison',
+      desc: 'Descriptive analysis comparing resource availability across states grouped by policy environment—correlation, not causation',
       area: 'Policy Navigator',
     },
     {
@@ -413,7 +413,7 @@ function ArcRadiusShowcase(): React.ReactElement {
     },
     {
       name: 'Health Info RAG',
-      desc: 'Retrieval-augmented generation over CDC/NIH sources with cited answers for PrEP, HRT, STI questions',
+      desc: 'Retrieval-augmented generation over clinical guidelines (WPATH, Endocrine Society) and peer-reviewed literature for health questions',
       area: 'Resource Locator',
     },
     {
@@ -1147,12 +1147,12 @@ function ArcRadiusShowcase(): React.ReactElement {
                 {
                   feature: 'Health Q&A',
                   color: 'emerald',
-                  flow: 'User Query → Semantic Search → CDC/NIH → Cited Answer',
+                  flow: 'User Query → Semantic Search → Clinical Guidelines → Cited Answer',
                 },
                 {
-                  feature: 'Evidence Linking',
+                  feature: 'State Comparison',
                   color: 'violet',
-                  flow: 'Bill Text → BioBERT → PubMed Match → Health Impacts',
+                  flow: 'Policy Grouping → Resource Counts → Per-Capita Rates',
                 },
               ].map((pipe) => (
                 <div

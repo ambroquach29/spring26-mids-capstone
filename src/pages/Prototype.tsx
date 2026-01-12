@@ -501,7 +501,9 @@ const aiSearchQueries: AISearchResult[] = [
   },
 ];
 
-// Health Info / CDC RAG mock data
+// Health Info RAG mock data
+// Note: Prioritizing stable sources (medical societies, PubMed, clinical guidelines)
+// as federal LGBTQ+ health datasets face availability challenges
 type HealthInfoResult = {
   query: string;
   answer: string;
@@ -516,14 +518,14 @@ const healthInfoQueries: HealthInfoResult[] = [
       'PrEP (pre-exposure prophylaxis) is a medication taken daily to prevent HIV infection. When taken as prescribed, PrEP is highly effective—reducing the risk of getting HIV from sex by about 99%. PrEP is recommended for people who are HIV-negative and at substantial risk of HIV infection, including sexually active gay and bisexual men, people with HIV-positive partners, and people who inject drugs.',
     sources: [
       {
-        title: 'PrEP | HIV Basics | HIV/AIDS | CDC',
-        url: 'https://www.cdc.gov/hiv/basics/prep.html',
+        title: 'PrEP Guidelines | AAFP',
+        url: 'https://www.aafp.org/pubs/afp/issues/2022/prep-guidelines.html',
         snippet:
           'PrEP reduces the risk of getting HIV from sex by about 99% when taken as prescribed.',
       },
       {
-        title: 'Pre-Exposure Prophylaxis | NIH',
-        url: 'https://hivinfo.nih.gov/understanding-hiv/fact-sheets/pre-exposure-prophylaxis-prep',
+        title: 'HIV Prevention (PrEP) | Fenway Health',
+        url: 'https://fenwayhealth.org/care/medical/hiv-prevention/',
         snippet:
           'PrEP is for people who do not have HIV but are at risk of getting HIV.',
       },
@@ -536,8 +538,8 @@ const healthInfoQueries: HealthInfoResult[] = [
       'Common side effects of PrEP (Truvada or Descovy) are usually mild and go away over time. They may include: headache, nausea, diarrhea, fatigue, and stomach pain. These side effects typically resolve within the first few weeks. Serious side effects are rare but can include kidney problems and bone density loss with long-term Truvada use. Regular monitoring (every 3 months) with your healthcare provider is recommended.',
     sources: [
       {
-        title: 'PrEP Side Effects | CDC',
-        url: 'https://www.cdc.gov/hiv/basics/prep/prep-side-effects.html',
+        title: 'PrEP Side Effects | Mayo Clinic',
+        url: 'https://www.mayoclinic.org/drugs-supplements/emtricitabine-tenofovir-oral-route/side-effects',
         snippet:
           'Side effects are generally mild and go away over time. Serious side effects are rare.',
       },
@@ -556,14 +558,14 @@ const healthInfoQueries: HealthInfoResult[] = [
       'HIV symptoms vary by stage. Acute HIV infection (2-4 weeks after exposure): flu-like symptoms including fever, chills, rash, night sweats, muscle aches, sore throat, fatigue, swollen lymph nodes, and mouth ulcers. Many people have no symptoms or symptoms so mild they go unnoticed. The only way to know for sure is to get tested. Clinical latency stage: HIV is still active but reproduces at low levels, often with no symptoms. Without treatment, this can progress to AIDS.',
     sources: [
       {
-        title: 'Symptoms of HIV | CDC',
-        url: 'https://www.cdc.gov/hiv/basics/whatishiv.html',
+        title: 'HIV/AIDS Symptoms | Mayo Clinic',
+        url: 'https://www.mayoclinic.org/diseases-conditions/hiv-aids/symptoms-causes',
         snippet:
           'Within 2 to 4 weeks after infection, some people may have flu-like symptoms.',
       },
       {
-        title: 'HIV/AIDS Symptoms | Mayo Clinic',
-        url: 'https://www.mayoclinic.org/diseases-conditions/hiv-aids/symptoms-causes',
+        title: 'Acute HIV Infection | AAFP',
+        url: 'https://www.aafp.org/pubs/afp/issues/hiv-infection.html',
         snippet:
           'The symptoms of primary HIV infection may be so mild you might not notice them.',
       },
@@ -573,13 +575,13 @@ const healthInfoQueries: HealthInfoResult[] = [
   {
     query: 'hiv testing',
     answer:
-      'There are three types of HIV tests: antibody tests (most common, results in 20-30 min for rapid tests), antigen/antibody tests (can detect HIV sooner, 18-45 days after exposure), and nucleic acid tests (NATs) (can detect HIV 10-33 days after exposure, most expensive). The CDC recommends everyone ages 13-64 get tested at least once, and those at higher risk get tested at least annually. Many clinics offer free, confidential HIV testing.',
+      'There are three types of HIV tests: antibody tests (most common, results in 20-30 min for rapid tests), antigen/antibody tests (can detect HIV sooner, 18-45 days after exposure), and nucleic acid tests (NATs) (can detect HIV 10-33 days after exposure, most expensive). Medical guidelines recommend everyone ages 13-64 get tested at least once, and those at higher risk get tested at least annually. Many clinics offer free, confidential HIV testing.',
     sources: [
       {
-        title: 'HIV Testing | CDC',
-        url: 'https://www.cdc.gov/hiv/testing/',
+        title: 'HIV Testing | Planned Parenthood',
+        url: 'https://www.plannedparenthood.org/learn/stds-hiv-safer-sex/hiv-aids/should-i-get-tested-hiv',
         snippet:
-          'The CDC recommends that everyone between the ages of 13 and 64 get tested for HIV at least once.',
+          'Everyone between the ages of 13 and 64 should get tested for HIV at least once.',
       },
       {
         title: 'Types of HIV Tests | HIV.gov',
@@ -626,8 +628,8 @@ const healthInfoQueries: HealthInfoResult[] = [
           '42% of LGBTQ+ young people seriously considered suicide in the past year.',
       },
       {
-        title: 'Mental Health | CDC LGBTQ+ Health',
-        url: 'https://www.cdc.gov/lgbthealth/mental-health.htm',
+        title: 'LGBTQ+ Mental Health | NAMI',
+        url: 'https://www.nami.org/Your-Journey/Identity-and-Cultural-Dimensions/LGBTQ',
         snippet:
           'LGBTQ+ youth are at higher risk for depression, anxiety, and suicidal ideation.',
       },
@@ -1087,7 +1089,7 @@ SECTION 2. This Act takes effect September 1, 2025.`,
           },
         ],
         dsTechnique:
-          'Systematic review mining from PubMed, Cochrane Library. BioBERT extracts health outcomes. Causal inference models estimate policy impact on population health metrics.',
+          'Systematic review mining from PubMed, Cochrane Library. BioBERT extracts health outcomes. Cross-sectional comparison of resource availability across policy environments.',
       },
       sponsorContact: {
         name: 'Sen. Donna Campbell',
@@ -3268,7 +3270,7 @@ Respectfully,
               </div>
             </div>
 
-            {/* 3. Policy Impact Correlation */}
+            {/* 3. Similar States Comparison */}
             <div className="p-4 bg-white border border-gray-200 rounded-xl">
               <div className="flex items-center gap-2 mb-3">
                 <div className="p-2 bg-rose-100 rounded-lg">
@@ -3276,83 +3278,115 @@ Respectfully,
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-gray-800">
-                    Policy Impact on Resources
+                    What Similar States Look Like
                   </h4>
                   <p className="text-xs text-gray-500">
-                    Correlation Analysis with SAMHSA & Business Data
+                    Resource availability in states with similar policies
                   </p>
                 </div>
               </div>
 
-              {/* Impact Metrics */}
-              <div className="grid grid-cols-3 gap-2 mb-3">
-                <div className="p-2 bg-rose-50 rounded-lg text-center">
-                  <Building size={16} className="mx-auto text-rose-500 mb-1" />
-                  <p className="text-lg font-bold text-rose-700">
-                    {bill.spectrum === 'Harmful' ? '-12%' : '+8%'}
-                  </p>
-                  <p className="text-xs text-rose-500">Healthcare Facilities</p>
-                </div>
-                <div className="p-2 bg-blue-50 rounded-lg text-center">
-                  <Users size={16} className="mx-auto text-blue-500 mb-1" />
-                  <p className="text-lg font-bold text-blue-700">
-                    {bill.spectrum === 'Harmful' ? '-23%' : '+15%'}
-                  </p>
-                  <p className="text-xs text-blue-500">LGBTQ+ Services</p>
-                </div>
-                <div className="p-2 bg-amber-50 rounded-lg text-center">
-                  <Workflow size={16} className="mx-auto text-amber-500 mb-1" />
-                  <p className="text-lg font-bold text-amber-700">
-                    {bill.spectrum === 'Harmful' ? '-18%' : '+12%'}
-                  </p>
-                  <p className="text-xs text-amber-500">Business Investment</p>
-                </div>
-              </div>
-
-              {/* Correlation Chart Mock */}
+              {/* Descriptive Comparison */}
               <div className="p-3 bg-gray-50 rounded-lg mb-3">
                 <p className="text-xs font-medium text-gray-600 mb-2">
-                  Resource Change After Similar Bills (Historical)
+                  {bill.spectrum === 'Harmful'
+                    ? 'States with restrictive policies tend to have:'
+                    : 'States with protective policies tend to have:'}
                 </p>
-                <div className="flex items-end gap-1 h-20">
-                  {[
-                    { label: '6mo', val: bill.spectrum === 'Harmful' ? -5 : 3 },
-                    {
-                      label: '1yr',
-                      val: bill.spectrum === 'Harmful' ? -12 : 8,
-                    },
-                    {
-                      label: '2yr',
-                      val: bill.spectrum === 'Harmful' ? -18 : 12,
-                    },
-                    {
-                      label: '3yr',
-                      val: bill.spectrum === 'Harmful' ? -15 : 15,
-                    },
-                    {
-                      label: '5yr',
-                      val: bill.spectrum === 'Harmful' ? -10 : 18,
-                    },
-                  ].map((bar, i) => (
-                    <div key={i} className="flex-1 flex flex-col items-center">
-                      <div
-                        className={`w-full rounded-t ${
-                          bar.val >= 0 ? 'bg-emerald-400' : 'bg-rose-400'
-                        }`}
-                        style={{
-                          height: `${Math.abs(bar.val) * 3}px`,
-                          marginTop: bar.val >= 0 ? 'auto' : 0,
-                        }}
-                      />
-                      <span className="text-xs text-gray-400 mt-1">
-                        {bar.label}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Building size={14} className="text-gray-500" />
+                      <span className="text-sm text-gray-700">
+                        Affirming Healthcare Facilities
                       </span>
                     </div>
-                  ))}
+                    <span
+                      className={`text-sm font-semibold ${
+                        bill.spectrum === 'Harmful'
+                          ? 'text-rose-600'
+                          : 'text-emerald-600'
+                      }`}
+                    >
+                      {bill.spectrum === 'Harmful'
+                        ? '2.3 per 100K'
+                        : '5.8 per 100K'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Users size={14} className="text-gray-500" />
+                      <span className="text-sm text-gray-700">
+                        LGBTQ+ Support Groups
+                      </span>
+                    </div>
+                    <span
+                      className={`text-sm font-semibold ${
+                        bill.spectrum === 'Harmful'
+                          ? 'text-rose-600'
+                          : 'text-emerald-600'
+                      }`}
+                    >
+                      {bill.spectrum === 'Harmful'
+                        ? '1.1 per 100K'
+                        : '3.4 per 100K'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Home size={14} className="text-gray-500" />
+                      <span className="text-sm text-gray-700">
+                        Community Centers
+                      </span>
+                    </div>
+                    <span
+                      className={`text-sm font-semibold ${
+                        bill.spectrum === 'Harmful'
+                          ? 'text-rose-600'
+                          : 'text-emerald-600'
+                      }`}
+                    >
+                      {bill.spectrum === 'Harmful'
+                        ? '0.4 per 100K'
+                        : '1.2 per 100K'}
+                    </span>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-400 text-center mt-1">
-                  % change in LGBTQ+ affirming resources
+                <p className="text-xs text-gray-400 mt-2 italic">
+                  Based on {bill.similarBills?.length || 3} states with similar
+                  legislation
                 </p>
+              </div>
+
+              {/* Actionable Next Steps */}
+              <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 mb-3">
+                <p className="text-xs font-semibold text-amber-800 mb-2 flex items-center gap-1">
+                  <Target size={12} />3 Things You Can Do With This Info
+                </p>
+                <ol className="text-xs text-amber-700 space-y-1.5">
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold">1.</span>
+                    <span>
+                      <strong>Find resources now</strong> — Use our Resource
+                      Locator to see what's available in your area today
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold">2.</span>
+                    <span>
+                      <strong>Compare states</strong> — If considering
+                      relocation, see the Policy Navigator map for
+                      state-by-state comparison
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold">3.</span>
+                    <span>
+                      <strong>Take action</strong> — Contact your legislators
+                      using the draft letter tool above
+                    </span>
+                  </li>
+                </ol>
               </div>
 
               {/* Data Sources */}
@@ -3361,22 +3395,20 @@ Respectfully,
                   SAMHSA Treatment Locator
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 rounded text-gray-600">
-                  Census Business Patterns
+                  CenterLink Directory
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 rounded text-gray-600">
                   MAP Policy Data
                 </span>
-                <span className="text-xs px-2 py-1 bg-gray-100 rounded text-gray-600">
-                  CenterLink Directory
-                </span>
               </div>
 
-              {/* DS Technique */}
+              {/* DS Technique - Honest framing */}
               <div className="p-2 bg-slate-50 rounded border border-slate-200">
                 <p className="text-xs text-slate-600">
-                  <strong>Techniques:</strong> Difference-in-differences (DiD),
-                  Interrupted time series, Panel regression, Propensity score
-                  matching for causal inference
+                  <strong>Method:</strong> Cross-sectional comparison of
+                  resource availability across states grouped by policy
+                  environment. Correlation, not causation—many factors influence
+                  resource availability.
                 </p>
               </div>
             </div>
@@ -3405,7 +3437,7 @@ Respectfully,
                 <div>
                   <p className="font-medium text-indigo-700">Outputs</p>
                   <p className="text-indigo-600">
-                    Predictions, Similarity, Impact
+                    Predictions, Similarity, Comparisons
                   </p>
                 </div>
               </div>
