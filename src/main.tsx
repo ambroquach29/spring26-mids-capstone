@@ -7,7 +7,6 @@ import {
   MapPin,
   Scale,
   Phone,
-  BarChart3,
   Heart,
   Users,
   AlertTriangle,
@@ -22,6 +21,7 @@ import {
   Navigation,
   Stethoscope,
   Zap,
+  Menu,
 } from 'lucide-react';
 
 // Custom Arc Radius Logo Component - Warped topographic style with pindrop
@@ -303,6 +303,7 @@ type MarketPlayer = {
 function ArcRadiusShowcase(): React.ReactElement {
   const [scrollY, setScrollY] = useState<number>(0);
   const [_activeFeature, setActiveFeature] = useState<number>(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const handleScroll = (): void => setScrollY(window.scrollY);
@@ -358,9 +359,9 @@ function ArcRadiusShowcase(): React.ReactElement {
       icon: Scale,
       title: 'Policy Navigator',
       description:
-        'Interactive state policy scorecard with bill-level analysis. AI classifies bills as Supportive/Neutral/Harmful, extracts key provisions, links to peer-reviewed health research, and predicts passage likelihood. Includes tools to draft advocacy letters and contact legislators.',
+        'Interactive state policy scorecard with bill-level analysis. AI classifies bills as Supportive/Neutral/Harmful, extracts key provisions, links to peer-reviewed research, and shows what similar states look like. Includes tools to draft advocacy letters and understand your legal rights.',
       color: 'from-teal-400 to-cyan-400',
-      tech: 'LegalBERT • BioBERT Evidence Mining • XGBoost Prediction',
+      tech: 'LegalBERT • Cross-State Comparison • Legal Rights RAG',
     },
     {
       icon: Phone,
@@ -369,14 +370,6 @@ function ArcRadiusShowcase(): React.ReactElement {
         'One-tap access to LGBTQ+-specific crisis lines (Trevor Project, Trans Lifeline) and general resources (988, Crisis Text Line). Includes privacy guidance—Trans Lifeline never contacts authorities without consent.',
       color: 'from-amber-400 to-yellow-400',
       tech: 'Curated Resource Database • Privacy-First Design',
-    },
-    {
-      icon: BarChart3,
-      title: 'Health Info Hub',
-      description:
-        'Plain-language health Q&A with cited sources from peer-reviewed literature and clinical guidelines (WPATH, Endocrine Society, Fenway Health). Designed for source resilience as federal LGBTQ+ health datasets face availability challenges.',
-      color: 'from-emerald-400 to-teal-400',
-      tech: 'RAG Pipeline • PubMed • Clinical Guidelines',
     },
   ];
 
@@ -402,6 +395,11 @@ function ArcRadiusShowcase(): React.ReactElement {
       area: 'Policy Navigator',
     },
     {
+      name: 'Legal Rights RAG',
+      desc: 'Retrieval-augmented generation over legal FAQ corpus (Lambda Legal, TLC, ACLU) for personalized rights Q&A',
+      area: 'Policy Navigator',
+    },
+    {
       name: 'Geospatial k-NN Search',
       desc: 'Haversine distance calculations find resources within configurable radius; R-tree indexing for fast queries',
       area: 'Resource Locator',
@@ -409,11 +407,6 @@ function ArcRadiusShowcase(): React.ReactElement {
     {
       name: 'NLP Service Extraction',
       desc: 'Extracts services, accessibility info, and key findings from resource descriptions and reviews',
-      area: 'Resource Locator',
-    },
-    {
-      name: 'Health Info RAG',
-      desc: 'Retrieval-augmented generation over clinical guidelines (WPATH, Endocrine Society) and peer-reviewed literature for health questions',
       area: 'Resource Locator',
     },
     {
@@ -524,7 +517,7 @@ function ArcRadiusShowcase(): React.ReactElement {
       {/* Navigation - Fixed: proper structure with scroll-based styling */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 px-6 py-4 transition-all duration-300 ${
-          scrollY > 50
+          scrollY > 50 || mobileMenuOpen
             ? 'bg-white/90 backdrop-blur-md shadow-sm'
             : 'bg-transparent'
         }`}
@@ -536,6 +529,8 @@ function ArcRadiusShowcase(): React.ReactElement {
               Arc Radius
             </span>
           </div>
+
+          {/* Desktop Nav */}
           <div className="hidden md:flex gap-8 text-sm font-medium text-slate-600">
             <a
               href="#problem"
@@ -562,7 +557,59 @@ function ArcRadiusShowcase(): React.ReactElement {
               Prototype
             </Link>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden mt-4 pb-4 border-t border-slate-200 pt-4">
+            <div className="flex flex-col gap-4 text-sm font-medium text-slate-600">
+              <a
+                href="#problem"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-slate-900 transition-colors py-2"
+              >
+                Problem
+              </a>
+              <a
+                href="#solution"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-slate-900 transition-colors py-2"
+              >
+                Solution
+              </a>
+              <a
+                href="#tech"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-slate-900 transition-colors py-2"
+              >
+                Technology
+              </a>
+              <a
+                href="#about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-slate-900 transition-colors py-2"
+              >
+                About
+              </a>
+              <Link
+                to="/prototype"
+                onClick={() => setMobileMenuOpen(false)}
+                className="bg-gradient-to-r from-rose-500 to-orange-500 text-white px-4 py-2 rounded-lg text-center hover:shadow-lg transition-all"
+              >
+                View Prototype →
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section - Restored animated background */}
@@ -1145,9 +1192,9 @@ function ArcRadiusShowcase(): React.ReactElement {
                   flow: 'Zipcode → Geocode → k-NN Search → NLP Enrichment',
                 },
                 {
-                  feature: 'Health Q&A',
+                  feature: 'Legal Rights Q&A',
                   color: 'emerald',
-                  flow: 'User Query → Semantic Search → Clinical Guidelines → Cited Answer',
+                  flow: 'Bill Context → Legal FAQ Retrieval → Personalized Answer',
                 },
                 {
                   feature: 'State Comparison',
@@ -1213,7 +1260,7 @@ function ArcRadiusShowcase(): React.ReactElement {
               About
             </span>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Hi!
+              Meet the Builder
             </h2>
           </div>
 

@@ -43,8 +43,6 @@ import {
   User,
   Vote,
   BookMarked,
-  TrendingUp,
-  TrendingDown,
   Mail,
   Share2,
   Twitter,
@@ -67,7 +65,7 @@ import {
   BarChart2,
   Activity,
   Building,
-  Workflow,
+  Scale,
 } from 'lucide-react';
 
 // Sample resource data
@@ -501,146 +499,133 @@ const aiSearchQueries: AISearchResult[] = [
   },
 ];
 
-// Health Info RAG mock data
-// Note: Prioritizing stable sources (medical societies, PubMed, clinical guidelines)
-// as federal LGBTQ+ health datasets face availability challenges
-type HealthInfoResult = {
-  query: string;
+// Legal Rights RAG Q&A mock data
+type LegalQAResult = {
+  question: string;
   answer: string;
-  sources: { title: string; url: string; snippet: string }[];
-  relatedTopics: string[];
+  sources: { name: string; url: string }[];
+  followUp: string[];
 };
 
-const healthInfoQueries: HealthInfoResult[] = [
-  {
-    query: 'prep',
+const legalQADatabase: { [key: string]: LegalQAResult } = {
+  'access care': {
+    question: 'Can I still access gender-affirming care?',
     answer:
-      'PrEP (pre-exposure prophylaxis) is a medication taken daily to prevent HIV infection. When taken as prescribed, PrEP is highly effective—reducing the risk of getting HIV from sex by about 99%. PrEP is recommended for people who are HIV-negative and at substantial risk of HIV infection, including sexually active gay and bisexual men, people with HIV-positive partners, and people who inject drugs.',
+      'Even in states with restrictions, options may include: (1) Telehealth from providers in other states—many "refuge states" like California, Minnesota, and Colorado have shield laws protecting providers. (2) Traveling to nearby states without restrictions. (3) Some restrictions only apply to minors, so adults may still access care. (4) Ongoing legal challenges may block enforcement.',
     sources: [
       {
-        title: 'PrEP Guidelines | AAFP',
-        url: 'https://www.aafp.org/pubs/afp/issues/2022/prep-guidelines.html',
-        snippet:
-          'PrEP reduces the risk of getting HIV from sex by about 99% when taken as prescribed.',
+        name: 'Lambda Legal - Healthcare Access',
+        url: 'https://lambdalegal.org/know-your-rights/healthcare',
       },
       {
-        title: 'HIV Prevention (PrEP) | Fenway Health',
-        url: 'https://fenwayhealth.org/care/medical/hiv-prevention/',
-        snippet:
-          'PrEP is for people who do not have HIV but are at risk of getting HIV.',
+        name: 'TransLaw Help Desk',
+        url: 'https://transgenderlawcenter.org/resources/health',
       },
     ],
-    relatedTopics: ['PrEP side effects', 'How to get PrEP', 'PrEP vs PEP'],
+    followUp: [
+      'What states have shield laws?',
+      'Can I use telehealth?',
+      'What about insurance coverage?',
+    ],
   },
-  {
-    query: 'prep side effects',
+  'court challenge': {
+    question: 'Is this law being challenged in court?',
     answer:
-      'Common side effects of PrEP (Truvada or Descovy) are usually mild and go away over time. They may include: headache, nausea, diarrhea, fatigue, and stomach pain. These side effects typically resolve within the first few weeks. Serious side effects are rare but can include kidney problems and bone density loss with long-term Truvada use. Regular monitoring (every 3 months) with your healthcare provider is recommended.',
+      'Many restrictive bills face legal challenges on constitutional grounds including equal protection, due process, and First Amendment claims. Organizations like the ACLU, Lambda Legal, and GLAD are actively litigating these cases. Court injunctions have temporarily blocked enforcement in several states while cases proceed.',
     sources: [
       {
-        title: 'PrEP Side Effects | Mayo Clinic',
-        url: 'https://www.mayoclinic.org/drugs-supplements/emtricitabine-tenofovir-oral-route/side-effects',
-        snippet:
-          'Side effects are generally mild and go away over time. Serious side effects are rare.',
+        name: 'ACLU - LGBTQ Rights Cases',
+        url: 'https://aclu.org/cases?issue=lgbtq-rights',
       },
       {
-        title: 'Truvada Prescribing Information | FDA',
-        url: 'https://www.accessdata.fda.gov/drugsatfda_docs/label/truvada.pdf',
-        snippet:
-          'The most common adverse reactions are headache, abdominal pain, and weight loss.',
+        name: 'Lambda Legal - Litigation',
+        url: 'https://lambdalegal.org/in-court',
       },
     ],
-    relatedTopics: ['PrEP monitoring', 'Descovy vs Truvada', 'Kidney health'],
+    followUp: [
+      'What is an injunction?',
+      'How long do court cases take?',
+      'Can I join a lawsuit?',
+    ],
   },
-  {
-    query: 'hiv symptoms',
+  'rights school': {
+    question: 'What are my rights at school?',
     answer:
-      'HIV symptoms vary by stage. Acute HIV infection (2-4 weeks after exposure): flu-like symptoms including fever, chills, rash, night sweats, muscle aches, sore throat, fatigue, swollen lymph nodes, and mouth ulcers. Many people have no symptoms or symptoms so mild they go unnoticed. The only way to know for sure is to get tested. Clinical latency stage: HIV is still active but reproduces at low levels, often with no symptoms. Without treatment, this can progress to AIDS.',
+      'Federal Title IX protections apply to sex discrimination, which courts have interpreted to include gender identity. You have the right to: be addressed by your correct name/pronouns (in many jurisdictions), access facilities consistent with your gender identity (varies by state/district), be free from harassment, and have your privacy protected. State laws vary significantly.',
     sources: [
       {
-        title: 'HIV/AIDS Symptoms | Mayo Clinic',
-        url: 'https://www.mayoclinic.org/diseases-conditions/hiv-aids/symptoms-causes',
-        snippet:
-          'Within 2 to 4 weeks after infection, some people may have flu-like symptoms.',
+        name: 'GLSEN - Know Your Rights',
+        url: 'https://glsen.org/knowyourrights',
       },
       {
-        title: 'Acute HIV Infection | AAFP',
-        url: 'https://www.aafp.org/pubs/afp/issues/hiv-infection.html',
-        snippet:
-          'The symptoms of primary HIV infection may be so mild you might not notice them.',
+        name: 'ACLU - Student Rights',
+        url: 'https://aclu.org/know-your-rights/students-rights',
       },
     ],
-    relatedTopics: ['HIV testing', 'HIV transmission', 'HIV treatment'],
+    followUp: [
+      'Can my school out me to my parents?',
+      'What if I face harassment?',
+      'Can I start a GSA?',
+    ],
   },
-  {
-    query: 'hiv testing',
+  'name change': {
+    question: 'How do I change my name and gender marker?',
     answer:
-      'There are three types of HIV tests: antibody tests (most common, results in 20-30 min for rapid tests), antigen/antibody tests (can detect HIV sooner, 18-45 days after exposure), and nucleic acid tests (NATs) (can detect HIV 10-33 days after exposure, most expensive). Medical guidelines recommend everyone ages 13-64 get tested at least once, and those at higher risk get tested at least annually. Many clinics offer free, confidential HIV testing.',
+      'The process varies by state but generally involves: (1) Filing a petition with your local court. (2) Some states require a hearing, others are administrative. (3) Fees range from $0-$500 depending on state and fee waivers. (4) Gender marker changes may require different documentation—some states require surgery, others accept a letter from a provider, some allow self-attestation.',
     sources: [
       {
-        title: 'HIV Testing | Planned Parenthood',
-        url: 'https://www.plannedparenthood.org/learn/stds-hiv-safer-sex/hiv-aids/should-i-get-tested-hiv',
-        snippet:
-          'Everyone between the ages of 13 and 64 should get tested for HIV at least once.',
+        name: 'National Center for Transgender Equality - ID Documents',
+        url: 'https://transequality.org/documents',
       },
       {
-        title: 'Types of HIV Tests | HIV.gov',
-        url: 'https://www.hiv.gov/hiv-basics/hiv-testing/learn-about-hiv-testing/types-of-hiv-tests',
-        snippet:
-          'There are three types of tests used to diagnose HIV infection: antibody tests, antigen/antibody tests, and NATs.',
+        name: 'Transgender Law Center - ID Update',
+        url: 'https://transgenderlawcenter.org/resources/id',
       },
     ],
-    relatedTopics: ['Window period', 'Where to get tested', 'Home HIV tests'],
+    followUp: [
+      'Do I need a lawyer?',
+      'Can I seal my records?',
+      'What about my birth certificate?',
+    ],
   },
-  {
-    query: 'hormone therapy transgender',
+  workplace: {
+    question: 'What are my rights at work?',
     answer:
-      'Gender-affirming hormone therapy (GAHT) helps align physical characteristics with gender identity. For transfeminine individuals: estrogen and anti-androgens lead to breast development, softer skin, reduced body hair, and fat redistribution. For transmasculine individuals: testosterone leads to voice deepening, facial hair growth, muscle development, and fat redistribution. Changes begin within months but full effects take 2-5 years. Hormone therapy requires ongoing medical supervision and regular blood tests.',
+      'Federal law (Title VII as interpreted by the Supreme Court in Bostock v. Clayton County) prohibits employment discrimination based on sexual orientation and gender identity. This means employers cannot fire, refuse to hire, or discriminate against you because you are LGBTQ+. Many states have additional protections. You can file complaints with the EEOC.',
     sources: [
       {
-        title: 'Transgender Health | Endocrine Society',
-        url: 'https://www.endocrine.org/clinical-practice-guidelines/gender-dysphoria-gender-incongruence',
-        snippet:
-          'Hormone therapy helps transgender individuals develop physical characteristics consistent with their gender identity.',
+        name: 'EEOC - LGBTQ+ Workers',
+        url: 'https://eeoc.gov/sexual-orientation-and-gender-identity-sogi-discrimination',
       },
       {
-        title: 'WPATH Standards of Care | Version 8',
-        url: 'https://www.wpath.org/soc8',
-        snippet:
-          'Gender-affirming medical interventions have been shown to improve psychological well-being.',
+        name: 'Lambda Legal - Workplace',
+        url: 'https://lambdalegal.org/know-your-rights/workplace',
       },
     ],
-    relatedTopics: [
-      'Informed consent',
-      'Hormone therapy timeline',
-      'Finding trans healthcare',
+    followUp: [
+      'What about bathroom access at work?',
+      'Can I be fired for being trans?',
+      'How do I file a complaint?',
     ],
   },
-  {
-    query: 'mental health lgbtq',
+  insurance: {
+    question: 'Will insurance cover gender-affirming care?',
     answer:
-      'LGBTQ+ individuals face elevated mental health risks due to minority stress, discrimination, and lack of affirming care. Key statistics: LGBTQ+ youth are 4x more likely to attempt suicide than peers. 42% of LGBTQ+ youth seriously considered suicide in the past year. However, supportive environments dramatically reduce risk—LGBTQ+ youth with at least one accepting adult are 40% less likely to attempt suicide. Affirming mental health care that understands LGBTQ+ experiences is crucial.',
+      'Coverage varies significantly: (1) Many private insurers now cover transition-related care due to ACA non-discrimination rules. (2) Medicaid coverage depends on your state—some cover all care, some have exclusions. (3) Medicare covers medically necessary gender-affirming care. (4) Exclusions specifically for transgender care are increasingly being struck down as discriminatory.',
     sources: [
+      { name: 'Out2Enroll - Insurance Guide', url: 'https://out2enroll.org' },
       {
-        title: 'LGBTQ Youth Mental Health | Trevor Project 2024',
-        url: 'https://www.thetrevorproject.org/survey-2024/',
-        snippet:
-          '42% of LGBTQ+ young people seriously considered suicide in the past year.',
-      },
-      {
-        title: 'LGBTQ+ Mental Health | NAMI',
-        url: 'https://www.nami.org/Your-Journey/Identity-and-Cultural-Dimensions/LGBTQ',
-        snippet:
-          'LGBTQ+ youth are at higher risk for depression, anxiety, and suicidal ideation.',
+        name: 'Transgender Law Center - Insurance',
+        url: 'https://transgenderlawcenter.org/resources/health/insurance',
       },
     ],
-    relatedTopics: [
-      'Finding affirming therapists',
-      'Crisis resources',
-      'Supporting LGBTQ+ youth',
+    followUp: [
+      'How do I appeal a denial?',
+      'What about prior authorization?',
+      'Are there patient assistance programs?',
     ],
   },
-];
+};
 
 // Comparison queries mock data
 type ComparisonResult = {
@@ -2213,11 +2198,16 @@ function BillDetailView({
   onClose: () => void;
 }) {
   const [activeTab, setActiveTab] = useState<
-    'analysis' | 'evidence' | 'action' | 'predictions' | 'text' | 'history'
-  >('analysis');
+    'overview' | 'rights' | 'action' | 'details'
+  >('overview');
   const [draftLetter, setDraftLetter] = useState<string | null>(null);
   const [isGeneratingLetter, setIsGeneratingLetter] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Legal RAG Q&A state
+  const [legalQuestion, setLegalQuestion] = useState('');
+  const [legalAnswer, setLegalAnswer] = useState<LegalQAResult | null>(null);
+  const [isLoadingLegal, setIsLoadingLegal] = useState(false);
 
   // Generate a draft letter based on bill stance
   const generateLetter = async (stance: 'support' | 'oppose') => {
@@ -2288,6 +2278,58 @@ Respectfully,
       `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
       '_blank'
     );
+  };
+
+  // Legal RAG Q&A handler
+  const handleLegalQuestion = async (question?: string) => {
+    const q = question || legalQuestion;
+    if (!q.trim()) return;
+
+    setIsLoadingLegal(true);
+    // Simulate RAG retrieval delay
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    const queryLower = q.toLowerCase();
+
+    // Match against legal Q&A database
+    let match: LegalQAResult | null = null;
+    for (const [key, value] of Object.entries(legalQADatabase)) {
+      if (
+        queryLower.includes(key) ||
+        key.split(' ').some((word) => queryLower.includes(word))
+      ) {
+        match = value;
+        break;
+      }
+    }
+
+    if (match) {
+      setLegalAnswer(match);
+    } else {
+      // Default response for unmatched queries
+      setLegalAnswer({
+        question: q,
+        answer: `I don't have specific information on "${q}" yet. For personalized legal guidance, I recommend contacting one of the legal resources below. They offer free consultations and can address your specific situation.`,
+        sources: [
+          {
+            name: 'Lambda Legal Help Desk',
+            url: 'https://lambdalegal.org/helpdesk',
+          },
+          {
+            name: 'Trans Law Center',
+            url: 'https://transgenderlawcenter.org/legalinfo',
+          },
+        ],
+        followUp: [
+          'What are my healthcare rights?',
+          'How do I change my name?',
+          'What are my rights at work?',
+        ],
+      });
+    }
+
+    setIsLoadingLegal(false);
+    setLegalQuestion('');
   };
 
   const spectrumColors = {
@@ -2372,79 +2414,57 @@ Respectfully,
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex border-b border-gray-200 overflow-x-auto">
+      {/* Tabs - Consolidated to 4 */}
+      <div className="flex border-b border-gray-200">
         <button
-          onClick={() => setActiveTab('analysis')}
-          className={`flex-1 min-w-fit px-3 py-3 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${
-            activeTab === 'analysis'
+          onClick={() => setActiveTab('overview')}
+          className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+            activeTab === 'overview'
               ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <Sparkles size={14} />
-          Analysis
+          <Sparkles size={16} />
+          Overview
         </button>
         <button
-          onClick={() => setActiveTab('evidence')}
-          className={`flex-1 min-w-fit px-3 py-3 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${
-            activeTab === 'evidence'
+          onClick={() => setActiveTab('rights')}
+          className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+            activeTab === 'rights'
               ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <BookMarked size={14} />
-          Evidence
+          <Shield size={16} />
+          Your Rights
         </button>
         <button
           onClick={() => setActiveTab('action')}
-          className={`flex-1 min-w-fit px-3 py-3 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${
+          className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
             activeTab === 'action'
               ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <Megaphone size={14} />
-          Action
+          <Megaphone size={16} />
+          Take Action
         </button>
         <button
-          onClick={() => setActiveTab('predictions')}
-          className={`flex-1 min-w-fit px-3 py-3 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${
-            activeTab === 'predictions'
+          onClick={() => setActiveTab('details')}
+          className={`flex-1 px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
+            activeTab === 'details'
               ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <Brain size={14} />
-          DS Insights
-        </button>
-        <button
-          onClick={() => setActiveTab('text')}
-          className={`flex-1 min-w-fit px-3 py-3 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${
-            activeTab === 'text'
-              ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FileText size={14} />
-          Text
-        </button>
-        <button
-          onClick={() => setActiveTab('history')}
-          className={`flex-1 min-w-fit px-3 py-3 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${
-            activeTab === 'history'
-              ? 'text-purple-600 border-b-2 border-purple-600 bg-purple-50'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <Clock size={14} />
-          History
+          <FileText size={16} />
+          Details
         </button>
       </div>
 
       {/* Tab Content */}
-      <div className="p-4 max-h-96 overflow-auto">
-        {activeTab === 'analysis' && (
+      <div className="p-4 max-h-[500px] overflow-auto">
+        {activeTab === 'overview' && (
           <div className="space-y-4">
             {/* AI Classification Badge */}
             <div className="flex items-center gap-2 p-3 bg-purple-50 rounded-lg border border-purple-100">
@@ -2644,141 +2664,50 @@ Respectfully,
           </div>
         )}
 
-        {activeTab === 'evidence' && (
-          <div className="space-y-4">
-            {bill.researchEvidence ? (
-              <>
-                {/* Health Impacts Summary */}
-                <div>
-                  <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                    {bill.spectrum === 'Harmful' ? (
-                      <TrendingDown size={16} className="text-red-500" />
-                    ) : (
-                      <TrendingUp size={16} className="text-green-500" />
-                    )}
-                    Predicted Health Impacts
-                  </h4>
-                  <div className="space-y-2">
-                    {bill.researchEvidence.healthImpacts.map((impact, idx) => (
-                      <div
-                        key={idx}
-                        className={`p-3 rounded-lg border ${
-                          impact.direction === 'positive'
-                            ? 'bg-green-50 border-green-200'
-                            : 'bg-red-50 border-red-200'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 mb-1">
-                          <span
-                            className={`text-xs font-semibold ${
-                              impact.direction === 'positive'
-                                ? 'text-green-700'
-                                : 'text-red-700'
-                            }`}
-                          >
-                            {impact.category}
-                          </span>
-                          <span
-                            className={`text-xs px-1.5 py-0.5 rounded ${
-                              impact.magnitude === 'significant'
-                                ? 'bg-gray-800 text-white'
-                                : impact.magnitude === 'moderate'
-                                ? 'bg-gray-500 text-white'
-                                : 'bg-gray-300 text-gray-700'
-                            }`}
-                          >
-                            {impact.magnitude}
-                          </span>
-                        </div>
-                        <p
-                          className={`text-xs ${
-                            impact.direction === 'positive'
-                              ? 'text-green-600'
-                              : 'text-red-600'
-                          }`}
-                        >
-                          {impact.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Research Studies */}
-                <div>
-                  <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                    <BookMarked size={16} className="text-blue-500" />
-                    Supporting Research ({
-                      bill.researchEvidence.studies.length
-                    }{' '}
-                    studies)
-                  </h4>
-                  <div className="space-y-3">
-                    {bill.researchEvidence.studies.map((study, idx) => (
-                      <div
-                        key={idx}
-                        className="p-3 bg-white border border-gray-200 rounded-lg"
-                      >
-                        <p className="text-sm font-medium text-gray-800 mb-1">
-                          {study.title}
-                        </p>
-                        <p className="text-xs text-gray-500 mb-2">
-                          {study.authors} • {study.journal} ({study.year})
-                          {study.sampleSize && ` • ${study.sampleSize}`}
-                        </p>
-                        <div
-                          className={`p-2 rounded text-xs ${
-                            study.impactType === 'positive'
-                              ? 'bg-green-50 text-green-700'
-                              : study.impactType === 'negative'
-                              ? 'bg-red-50 text-red-700'
-                              : 'bg-gray-50 text-gray-700'
-                          }`}
-                        >
-                          <strong>Finding:</strong> {study.finding}
-                        </div>
-                        {study.doi && (
-                          <a
-                            href={`https://doi.org/${study.doi}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-blue-500 hover:underline mt-2 inline-flex items-center gap-1"
-                          >
-                            <ExternalLink size={10} />
-                            DOI: {study.doi}
-                          </a>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* DS Technique */}
-                <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Database size={14} className="text-slate-500" />
-                    <span className="text-xs font-semibold text-slate-600">
-                      DS Technique: Research Mining
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-500">
-                    {bill.researchEvidence.dsTechnique}
-                  </p>
-                </div>
-              </>
-            ) : (
-              <div className="text-center py-8 text-gray-400">
-                <BookMarked size={32} className="mx-auto mb-2 opacity-50" />
-                <p className="text-sm">
-                  Research evidence not yet available for this bill
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-
         {activeTab === 'action' && (
           <div className="space-y-4">
+            {/* Research Evidence Section - moved from Evidence tab */}
+            {bill.researchEvidence && (
+              <div className="p-4 bg-blue-50 rounded-xl border border-blue-200 mb-4">
+                <h4 className="text-sm font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                  <BookMarked size={16} />
+                  Research Evidence
+                </h4>
+                <div className="space-y-2">
+                  {bill.researchEvidence.studies
+                    .slice(0, 2)
+                    .map((study, idx) => (
+                      <div
+                        key={idx}
+                        className="p-2 bg-white rounded border border-blue-100"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-sm font-medium text-blue-600">
+                            {study.title}
+                          </p>
+                          {study.doi && (
+                            <a
+                              href={`https://doi.org/${study.doi}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-500 hover:text-blue-700 flex-shrink-0"
+                            >
+                              <ExternalLink size={12} />
+                            </a>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-600 mt-1">
+                          {study.finding}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {study.journal}, {study.year}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+
             {/* Action Header */}
             <div
               className={`p-3 rounded-lg ${
@@ -3012,19 +2941,75 @@ Respectfully,
           </div>
         )}
 
-        {activeTab === 'predictions' && (
+        {activeTab === 'details' && (
           <div className="space-y-4">
-            {/* Section Header */}
+            {/* Bill Text Section */}
+            <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+              <h4 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <FileText size={16} className="text-gray-600" />
+                Bill Text
+              </h4>
+              <pre className="text-xs text-gray-600 whitespace-pre-wrap font-mono bg-white p-3 rounded-lg max-h-40 overflow-auto">
+                {bill.fullText}
+              </pre>
+            </div>
+
+            {/* History Timeline */}
+            <div className="p-4 bg-white rounded-xl border border-gray-200">
+              <h4 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <Clock size={16} className="text-gray-600" />
+                Legislative History
+              </h4>
+              <div className="space-y-2">
+                {bill.history.map((entry, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-3 pb-2 border-b border-gray-100 last:border-0"
+                  >
+                    <div className="w-16 shrink-0">
+                      <p className="text-xs font-medium text-gray-500">
+                        {entry.date}
+                      </p>
+                      {entry.chamber && (
+                        <p className="text-xs text-gray-400">{entry.chamber}</p>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-600">{entry.action}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Similar Bills */}
+            {bill.similarBills.length > 0 && (
+              <div className="p-4 bg-amber-50 rounded-xl border border-amber-200">
+                <h4 className="text-sm font-semibold text-amber-800 mb-3 flex items-center gap-2">
+                  <GitFork size={16} />
+                  Similar Bills (Copycat Detection)
+                </h4>
+                <div className="space-y-1">
+                  {bill.similarBills.map((similar, idx) => (
+                    <p key={idx} className="text-sm text-amber-700">
+                      {similar}
+                    </p>
+                  ))}
+                </div>
+                <p className="text-xs text-amber-600 mt-2 italic">
+                  Identified using BERT embeddings + cosine similarity
+                </p>
+              </div>
+            )}
+
+            {/* DS Insights Section */}
             <div className="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
               <div className="flex items-center gap-2">
                 <Brain size={18} className="text-indigo-600" />
                 <span className="font-semibold text-indigo-800">
-                  Data Science Insights & Predictions
+                  Data Science Insights
                 </span>
               </div>
               <p className="text-xs text-indigo-600 mt-1">
-                ML models trained on historical legislative data to predict
-                outcomes
+                ML models trained on historical legislative data
               </p>
             </div>
 
@@ -3445,47 +3430,374 @@ Respectfully,
           </div>
         )}
 
-        {activeTab === 'text' && (
-          <div>
-            <pre className="text-sm text-gray-600 whitespace-pre-wrap font-mono bg-gray-50 p-4 rounded-lg">
-              {bill.fullText}
-            </pre>
-          </div>
-        )}
-
-        {activeTab === 'history' && (
-          <div className="space-y-3">
-            {bill.history.map((entry, idx) => (
-              <div
-                key={idx}
-                className="flex items-start gap-3 pb-3 border-b border-gray-100 last:border-0"
+        {activeTab === 'rights' && (
+          <div className="space-y-4">
+            {/* Personalized Impact */}
+            <div
+              className={`p-4 rounded-xl border ${
+                bill.spectrum === 'Harmful'
+                  ? 'bg-rose-50 border-rose-200'
+                  : 'bg-emerald-50 border-emerald-200'
+              }`}
+            >
+              <h4
+                className={`text-sm font-semibold mb-2 flex items-center gap-2 ${
+                  bill.spectrum === 'Harmful'
+                    ? 'text-rose-800'
+                    : 'text-emerald-800'
+                }`}
               >
-                <div className="w-20 shrink-0">
-                  <p className="text-xs font-medium text-gray-500">
-                    {entry.date}
+                <AlertCircle size={16} />
+                What This Means For You
+              </h4>
+              <p
+                className={`text-sm ${
+                  bill.spectrum === 'Harmful'
+                    ? 'text-rose-700'
+                    : 'text-emerald-700'
+                }`}
+              >
+                {bill.spectrum === 'Harmful'
+                  ? `This ${
+                      bill.status === 'Enacted' ? 'law' : 'bill'
+                    } may restrict access to ${
+                      bill.subjects.includes('Healthcare')
+                        ? 'gender-affirming healthcare'
+                        : bill.subjects.includes('Public Facilities')
+                        ? 'public facilities matching your gender identity'
+                        : 'certain protections'
+                    } in ${bill.state}. ${
+                      bill.status === 'Enacted'
+                        ? 'It is currently in effect.'
+                        : 'It has not yet passed—there may still be time to take action.'
+                    }`
+                  : `This ${
+                      bill.status === 'Enacted' ? 'law' : 'bill'
+                    } provides protections for LGBTQ+ individuals in ${
+                      bill.state
+                    }. ${
+                      bill.status === 'Enacted'
+                        ? 'These protections are currently in effect.'
+                        : 'If passed, it would expand your rights.'
+                    }`}
+              </p>
+            </div>
+
+            {/* AI Explainability - Why This Classification */}
+            <div className="p-4 bg-purple-50 rounded-xl border border-purple-200">
+              <h4 className="text-sm font-semibold text-purple-800 mb-3 flex items-center gap-2">
+                <Brain size={16} />
+                Why We Classified This as "{bill.spectrum}"
+              </h4>
+              <div className="space-y-2 text-sm text-purple-700">
+                <div className="flex items-start gap-2">
+                  <span className="font-mono text-xs bg-purple-200 px-1.5 py-0.5 rounded">
+                    1
+                  </span>
+                  <span>
+                    <strong>Key provisions detected:</strong>{' '}
+                    {bill.aiAnalysis.keyProvisions.slice(0, 2).join('; ')}
+                  </span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="font-mono text-xs bg-purple-200 px-1.5 py-0.5 rounded">
+                    2
+                  </span>
+                  <span>
+                    <strong>Impact score:</strong>{' '}
+                    {bill.aiAnalysis.impactScore > 0 ? '+' : ''}
+                    {bill.aiAnalysis.impactScore}/5 based on affected
+                    populations and scope
+                  </span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="font-mono text-xs bg-purple-200 px-1.5 py-0.5 rounded">
+                    3
+                  </span>
+                  <span>
+                    <strong>Similar to:</strong>{' '}
+                    {bill.similarBills.length > 0
+                      ? bill.similarBills[0]
+                      : 'No similar bills found'}{' '}
+                    (pattern matching)
+                  </span>
+                </div>
+              </div>
+              <div className="mt-3 p-2 bg-white/50 rounded-lg">
+                <p className="text-xs text-purple-600">
+                  <strong>Model:</strong> LegalBERT fine-tuned on 10K+ LGBTQ+
+                  bills from LegiScan. Classification confidence:{' '}
+                  {bill.spectrum === 'Harmful'
+                    ? '94%'
+                    : bill.spectrum === 'Supportive'
+                    ? '91%'
+                    : '78%'}
+                </p>
+              </div>
+            </div>
+
+            {/* Know Your Rights Q&A */}
+            <div className="p-4 bg-white border border-gray-200 rounded-xl">
+              <h4 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <MessageCircle size={16} className="text-blue-500" />
+                Common Questions
+              </h4>
+              <div className="space-y-2">
+                {[
+                  {
+                    q:
+                      bill.spectrum === 'Harmful'
+                        ? 'Can I still access care if this passes?'
+                        : 'What new protections does this give me?',
+                    a:
+                      bill.spectrum === 'Harmful'
+                        ? `Options may include: out-of-state telehealth, refuge states (CA, MN, CO), or legal challenges. See legal resources below.`
+                        : `This law ${
+                            bill.status === 'Enacted'
+                              ? 'provides'
+                              : 'would provide'
+                          }: ${bill.aiAnalysis.keyProvisions[0].toLowerCase()}.`,
+                  },
+                  {
+                    q: 'Is this law being challenged in court?',
+                    a:
+                      bill.aiAnalysis.legalContext ||
+                      'Legal status information not available for this bill.',
+                  },
+                  {
+                    q:
+                      bill.spectrum === 'Harmful'
+                        ? 'What are my options if I live here?'
+                        : "How do I know if I'm protected?",
+                    a:
+                      bill.spectrum === 'Harmful'
+                        ? 'Contact one of the legal organizations below for personalized guidance on your situation.'
+                        : 'These protections apply statewide. Contact legal aid if you experience discrimination.',
+                  },
+                ].map((item, idx) => (
+                  <details key={idx} className="group">
+                    <summary className="flex items-center gap-2 cursor-pointer text-sm text-gray-700 hover:text-gray-900 py-2">
+                      <ChevronDown
+                        size={14}
+                        className="group-open:rotate-180 transition-transform"
+                      />
+                      {item.q}
+                    </summary>
+                    <p className="text-sm text-gray-600 pl-6 pb-2">{item.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+
+            {/* Legal RAG Q&A Chatbot */}
+            <div className="p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-200">
+              <h4 className="text-sm font-semibold text-indigo-800 mb-3 flex items-center gap-2">
+                <MessageCircle size={16} />
+                Ask About Your Rights
+                <span className="text-xs font-normal px-2 py-0.5 bg-indigo-200 rounded-full">
+                  RAG-Powered
+                </span>
+              </h4>
+
+              {/* Input */}
+              <div className="flex gap-2 mb-3">
+                <input
+                  type="text"
+                  value={legalQuestion}
+                  onChange={(e) => setLegalQuestion(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleLegalQuestion()}
+                  placeholder="e.g., Can I still access care? What are my rights at school?"
+                  className="flex-1 px-3 py-2 text-sm border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                />
+                <button
+                  onClick={() => handleLegalQuestion()}
+                  disabled={isLoadingLegal || !legalQuestion.trim()}
+                  className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {isLoadingLegal ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : (
+                    <Send size={14} />
+                  )}
+                  Ask
+                </button>
+              </div>
+
+              {/* Quick Questions */}
+              <div className="flex flex-wrap gap-1 mb-3">
+                {[
+                  'access care',
+                  'rights school',
+                  'name change',
+                  'workplace',
+                  'insurance',
+                ].map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => handleLegalQuestion(q)}
+                    className="text-xs px-2 py-1 bg-white border border-indigo-200 rounded-full text-indigo-600 hover:bg-indigo-100 transition-colors"
+                  >
+                    {q === 'access care'
+                      ? '💊 Healthcare access'
+                      : q === 'rights school'
+                      ? '🏫 School rights'
+                      : q === 'name change'
+                      ? '📝 Name/ID change'
+                      : q === 'workplace'
+                      ? '💼 Workplace rights'
+                      : '🏥 Insurance coverage'}
+                  </button>
+                ))}
+              </div>
+
+              {/* Response */}
+              {legalAnswer && (
+                <div className="p-3 bg-white rounded-lg border border-indigo-100">
+                  <p className="text-sm text-gray-700 mb-3">
+                    {legalAnswer.answer}
                   </p>
-                  {entry.chamber && (
-                    <p className="text-xs text-gray-400">{entry.chamber}</p>
+
+                  {/* Sources */}
+                  {legalAnswer.sources.length > 0 && (
+                    <div className="mb-3">
+                      <p className="text-xs font-medium text-gray-500 mb-1">
+                        Sources:
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {legalAnswer.sources.map((src, idx) => (
+                          <a
+                            key={idx}
+                            href={src.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs px-2 py-1 bg-indigo-50 text-indigo-600 rounded hover:bg-indigo-100 flex items-center gap-1"
+                          >
+                            {src.name}
+                            <ExternalLink size={10} />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Follow-up Questions */}
+                  {legalAnswer.followUp.length > 0 && (
+                    <div>
+                      <p className="text-xs font-medium text-gray-500 mb-1">
+                        Related questions:
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {legalAnswer.followUp.map((fq, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              setLegalQuestion(fq);
+                              handleLegalQuestion(fq);
+                            }}
+                            className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200"
+                          >
+                            {fq}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
-                <p className="text-sm text-gray-600">{entry.action}</p>
-              </div>
-            ))}
+              )}
 
-            {bill.similarBills.length > 0 && (
-              <div className="pt-3">
-                <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                  Similar Bills
-                </h4>
-                <div className="space-y-1">
-                  {bill.similarBills.map((similar, idx) => (
-                    <p key={idx} className="text-sm text-gray-500">
-                      {similar}
-                    </p>
-                  ))}
-                </div>
+              {/* DS Technique note */}
+              <p className="text-xs text-indigo-500 mt-2 italic">
+                Retrieval-Augmented Generation over legal FAQ corpus from Lambda
+                Legal, TLC, ACLU
+              </p>
+            </div>
+
+            {/* Legal Resources */}
+            <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
+              <h4 className="text-sm font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                <Scale size={16} />
+                Free Legal Resources
+              </h4>
+              <div className="grid gap-2">
+                {[
+                  {
+                    name: 'Lambda Legal',
+                    desc: 'LGBTQ+ legal defense & advocacy',
+                    url: 'https://lambdalegal.org/helpdesk',
+                    phone: '1-866-542-8336',
+                    focus: 'All LGBTQ+ legal issues',
+                  },
+                  {
+                    name: 'Transgender Law Center',
+                    desc: 'Trans-specific legal support',
+                    url: 'https://transgenderlawcenter.org/legalinfo',
+                    phone: '1-415-865-0176',
+                    focus: 'Healthcare, ID documents, discrimination',
+                  },
+                  {
+                    name: `ACLU ${bill.state}`,
+                    desc: 'State-specific civil liberties',
+                    url: `https://aclu.org/affiliates?state=${bill.state}`,
+                    phone: null,
+                    focus: 'Know your rights, legal intake',
+                  },
+                  {
+                    name: 'GLBTQ Legal Advocates (GLAD)',
+                    desc: 'New England & national impact',
+                    url: 'https://glad.org/know-your-rights',
+                    phone: '1-800-455-4523',
+                    focus: 'Legal info line, court cases',
+                  },
+                ].map((org, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 bg-white rounded-lg border border-blue-100"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="font-medium text-gray-800 text-sm">
+                          {org.name}
+                        </p>
+                        <p className="text-xs text-gray-500">{org.desc}</p>
+                        <p className="text-xs text-blue-600 mt-1">
+                          {org.focus}
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <a
+                          href={org.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors flex items-center gap-1"
+                        >
+                          <ExternalLink size={10} />
+                          Website
+                        </a>
+                        {org.phone && (
+                          <a
+                            href={`tel:${org.phone}`}
+                            className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors flex items-center gap-1"
+                          >
+                            <Phone size={10} />
+                            Call
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
+            </div>
+
+            {/* DS Technique Explanation */}
+            <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <p className="text-xs text-slate-600">
+                <strong>How this works:</strong> Bill text → LegalBERT extracts
+                affected rights & populations → RAG retrieves relevant legal FAQ
+                content → Personalized impact based on bill status &
+                jurisdiction. Legal resources matched by state and issue type.
+              </p>
+            </div>
           </div>
         )}
       </div>
@@ -3519,11 +3831,9 @@ export default function Prototype() {
     null
   );
   const [isSearching, setIsSearching] = useState(false);
-  const [aiQueryType, setAiQueryType] = useState<
-    'resources' | 'health' | 'compare'
-  >('resources');
-  const [healthInfoResult, setHealthInfoResult] =
-    useState<HealthInfoResult | null>(null);
+  const [aiQueryType, setAiQueryType] = useState<'resources' | 'compare'>(
+    'resources'
+  );
   const [comparisonResult, setComparisonResult] =
     useState<ComparisonResult | null>(null);
   const [showDSTechniques, setShowDSTechniques] = useState(false);
@@ -3592,7 +3902,6 @@ export default function Prototype() {
     setNlpAnalysis(null);
     // Clear previous results
     setAiSearchResult(null);
-    setHealthInfoResult(null);
     setComparisonResult(null);
 
     // Simulate AI processing delay
@@ -3625,30 +3934,6 @@ export default function Prototype() {
         });
         setResources(sampleResources);
         setSearchedLocation('AI Search');
-      }
-    } else if (aiQueryType === 'health') {
-      // Health info RAG logic
-      const match = healthInfoQueries.find(
-        (q) =>
-          queryLower.includes(q.query) ||
-          q.query.split(' ').some((word) => queryLower.includes(word))
-      );
-
-      if (match) {
-        setHealthInfoResult(match);
-      } else {
-        setHealthInfoResult({
-          query: aiSearchQuery,
-          answer:
-            "I don't have specific information on that topic yet. Try asking about: PrEP, HIV symptoms, HIV testing, hormone therapy, or LGBTQ+ mental health. For medical advice, please consult a healthcare provider.",
-          sources: [],
-          relatedTopics: [
-            'PrEP',
-            'HIV testing',
-            'Hormone therapy',
-            'Mental health',
-          ],
-        });
       }
     } else if (aiQueryType === 'compare') {
       // Comparison logic
@@ -3685,7 +3970,6 @@ export default function Prototype() {
 
   const clearAISearch = () => {
     setAiSearchResult(null);
-    setHealthInfoResult(null);
     setComparisonResult(null);
     setAiSearchQuery('');
     setResources([]);
@@ -3862,20 +4146,6 @@ export default function Prototype() {
                   </button>
                   <button
                     onClick={() => {
-                      setAiQueryType('health');
-                      clearAISearch();
-                    }}
-                    className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium transition-all ${
-                      aiQueryType === 'health'
-                        ? 'bg-white text-gray-800 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    <BookOpen size={14} />
-                    Health Info
-                  </button>
-                  <button
-                    onClick={() => {
                       setAiQueryType('compare');
                       clearAISearch();
                     }}
@@ -3905,8 +4175,6 @@ export default function Prototype() {
                       placeholder={
                         aiQueryType === 'resources'
                           ? 'e.g., free STI testing, hormone therapy, youth support...'
-                          : aiQueryType === 'health'
-                          ? 'e.g., PrEP side effects, HIV symptoms, hormone therapy...'
                           : 'e.g., PrEP vs PEP, support group vs therapy...'
                       }
                       className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-200"
@@ -3982,8 +4250,8 @@ export default function Prototype() {
                             Health Info (RAG Pipeline)
                           </p>
                           <p className="text-slate-500">
-                            CDC/NIH corpus → chunk retrieval → LLM synthesis →
-                            cited response
+                            Clinical guidelines → chunk retrieval → LLM
+                            synthesis → cited response
                           </p>
                         </div>
                       </div>
@@ -4039,80 +4307,6 @@ export default function Prototype() {
                         <X size={14} className="text-gray-400" />
                       </button>
                     </div>
-                  </div>
-                )}
-
-                {/* Health Info Result (RAG) */}
-                {healthInfoResult && aiQueryType === 'health' && (
-                  <div className="mt-3 p-4 bg-purple-50 rounded-lg border border-purple-100">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <BookOpen size={16} className="text-purple-500" />
-                        <span className="text-xs font-medium text-purple-600 bg-purple-100 px-2 py-0.5 rounded">
-                          RAG Response
-                        </span>
-                      </div>
-                      <button
-                        onClick={clearAISearch}
-                        className="p-1 hover:bg-purple-100 rounded transition-colors"
-                      >
-                        <X size={14} className="text-purple-400" />
-                      </button>
-                    </div>
-
-                    <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                      {healthInfoResult.answer}
-                    </p>
-
-                    {healthInfoResult.sources.length > 0 && (
-                      <div className="mb-3">
-                        <p className="text-xs font-medium text-gray-500 mb-2">
-                          Sources:
-                        </p>
-                        <div className="space-y-2">
-                          {healthInfoResult.sources.map((source, idx) => (
-                            <div
-                              key={idx}
-                              className="p-2 bg-white rounded border border-purple-100"
-                            >
-                              <a
-                                href={source.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-xs font-medium text-purple-600 hover:underline flex items-center gap-1"
-                              >
-                                {source.title}
-                                <ExternalLink size={10} />
-                              </a>
-                              <p className="text-xs text-gray-500 mt-1">
-                                "{source.snippet}"
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {healthInfoResult.relatedTopics.length > 0 && (
-                      <div>
-                        <p className="text-xs font-medium text-gray-500 mb-2">
-                          Related topics:
-                        </p>
-                        <div className="flex flex-wrap gap-1">
-                          {healthInfoResult.relatedTopics.map((topic, idx) => (
-                            <button
-                              key={idx}
-                              onClick={() => {
-                                setAiSearchQuery(topic);
-                              }}
-                              className="text-xs px-2 py-1 bg-purple-100 text-purple-600 rounded hover:bg-purple-200 transition-colors"
-                            >
-                              {topic}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 )}
 
