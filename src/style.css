@@ -214,3 +214,32 @@ body {
 #app {
   min-height: 100vh;
 }
+
+/* ===== Hero Arc Animations ===== */
+
+@keyframes arc-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes arc-spin-reverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes arc-spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.arc-spin {
+  animation: arc-spin 20s linear infinite;
+}
+
+.arc-spin-reverse {
+  animation: arc-spin-reverse 28s linear infinite;
+}
+
+.arc-spin-slow {
+  animation: arc-spin-slow 40s linear infinite;
+}
