@@ -218,15 +218,6 @@ export default function TeamPage() {
           </div>
         </div>
       </section>
-
-      {/* Coursework */}
-      <section className="py-8 px-6">
-        <p className="text-center text-xs text-slate-400">
-          Relevant Coursework: W231 Behind the Data · W255 ML Systems
-          Engineering · W261 ML at Scale
-        </p>
-      </section>
-
       <Footer />
     </div>
   );
