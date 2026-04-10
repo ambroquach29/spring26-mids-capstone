@@ -55,6 +55,8 @@ export default function Navbar() {
           ))}
           <a
             href={PRODUCT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-white/10 text-white border border-white/25 hover:bg-white/20 px-4 py-1.5 rounded-full text-sm font-medium transition-all"
           >
             Product
@@ -95,6 +97,8 @@ export default function Navbar() {
             ))}
             <a
               href={PRODUCT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
               className="bg-white/10 text-white border border-white/25 px-4 py-2 rounded-lg text-center"
             >
