@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { X, Menu } from 'lucide-react';
 import { ArcRadiusLogoSmall } from '../ui/ArcRadiusLogo';
 
+const PRODUCT_URL = 'https://arcradius.netlify.app';
+
 const NAV_LINKS = [
   { to: '/', label: 'Brief' },
   { to: '/journey', label: 'Journey' },
@@ -51,12 +53,12 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link
-            to="/prototype"
+          <a
+            href={PRODUCT_URL}
             className="bg-white/10 text-white border border-white/25 hover:bg-white/20 px-4 py-1.5 rounded-full text-sm font-medium transition-all"
           >
             Product
-          </Link>
+          </a>
         </div>
 
         {/* Mobile toggle */}
@@ -91,13 +93,13 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              to="/prototype"
+            <a
+              href={PRODUCT_URL}
               onClick={() => setMobileMenuOpen(false)}
               className="bg-white/10 text-white border border-white/25 px-4 py-2 rounded-lg text-center"
             >
               View Product
-            </Link>
+            </a>
           </div>
         </div>
       )}
